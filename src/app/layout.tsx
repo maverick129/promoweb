@@ -1,13 +1,8 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Inter } from 'next/font/google'
+import './globals.css'
+import ClientLayout from './ClientLayout'
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Jiva Prodi Harvest Champions",
-  description: "Join the Jiva Prodi Harvest Champions campaign and win exciting prizes!",
-};
+const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
@@ -17,10 +12,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <ClientLayout>
           {children}
-        </main>
+        </ClientLayout>
       </body>
     </html>
-  );
+  )
 }

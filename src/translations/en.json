@@ -1,0 +1,227 @@
+{
+  "common": {
+    "register": "Register Now",
+    "findStore": "Find Store",
+    "enterCode": "Enter Code",
+    "prizes": "Prizes",
+    "faq": "FAQ",
+    "continue": "Continue",
+    "back": "Back",
+    "submit": "Submit",
+    "verify": "Verify",
+    "resend": "Resend",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "error": "An error occurred. Please try again.",
+    "success": "Success!",
+    "tryAgain": "Try Again",
+    "close": "Close",
+    "required": "This field is required"
+  },
+  "navigation": {
+    "home": "Home",
+    "findStore": "Find Store",
+    "enterCode": "Enter Code",
+    "prizes": "Prizes",
+    "faq": "FAQ"
+  },
+  "home": {
+    "title": "Jiva Prodi Harvest Champions",
+    "subtitle": "Join Indonesia's biggest agricultural promotion and win amazing prizes!",
+    "competitions": {
+      "title": "Exciting Competitions",
+      "dailyPrizes": {
+        "title": "Daily Prizes",
+        "description": "Win instant prizes every day with valid promotion codes"
+      },
+      "communityEvents": {
+        "title": "Community Events",
+        "description": "Join special events and competitions with fellow farmers"
+      },
+      "seasonalRewards": {
+        "title": "Seasonal Rewards",
+        "description": "Participate in seasonal competitions for bigger prizes"
+      }
+    },
+    "howToParticipate": {
+      "title": "How to Participate",
+      "register": {
+        "title": "1. Register",
+        "description": "Create your account and verify your details to start participating."
+      },
+      "findStore": {
+        "title": "2. Find a Store",
+        "description": "Locate your nearest Jiva Prodi store to purchase products."
+      },
+      "enterCode": {
+        "title": "3. Enter Codes",
+        "description": "Enter promotion codes from your purchases to win prizes."
+      }
+    },
+    "prizes": {
+      "title": "Amazing Prizes Await",
+      "tShirts": {
+        "title": "T-Shirts",
+        "description": "Limited edition Jiva Prodi merchandise"
+      },
+      "majorPrizes": {
+        "title": "Major Prizes",
+        "description": "Agricultural equipment and tools"
+      },
+      "caps": {
+        "title": "Caps",
+        "description": "Stylish Jiva Prodi caps"
+      },
+      "waterBottles": {
+        "title": "Water Bottles",
+        "description": "Durable Jiva Prodi water bottles"
+      }
+    }
+  },
+  "register": {
+    "title": "Join the Harvest Champions",
+    "subtitle": "Register to participate in the Jiva Prodi Harvest Champions campaign",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "location": {
+        "label": "Your Location",
+        "description": "We need your location to find the nearest store",
+        "getLocation": "Use My Current Location",
+        "gettingLocation": "Getting your location...",
+        "success": "Location obtained successfully",
+        "error": "Could not get your location. Please enable location services in your browser settings.",
+        "notSupported": "Your browser doesn't support location services",
+        "manual": "Or enter your location manually",
+        "address": "Address",
+        "addressPlaceholder": "Enter your address",
+        "city": "City",
+        "cityPlaceholder": "Enter your city",
+        "province": "Province",
+        "provincePlaceholder": "Enter your province"
+      },
+      "terms": "I agree to the terms and conditions",
+      "submit": "Register Now",
+      "error": "Registration failed. Please try again.",
+      "success": "Registration successful! Redirecting..."
+    }
+  },
+  "codeEntry": {
+    "title": "Enter Your Code",
+    "subtitle": "Enter the 8-digit code from your Jiva Prodi product to win prizes",
+    "step1": "Enter the 8-digit code from your Jiva Prodi product",
+    "form": {
+      "code": "Promotion Code",
+      "codePlaceholder": "Enter 8-digit code",
+      "submit": "Validate Code",
+      "error": {
+        "invalid": "Invalid code. Please check and try again.",
+        "used": "This code has already been used.",
+        "format": "Code must be 8 characters long and contain only valid characters (2-9, A-H, J-N, P-Z).",
+        "required": "Please enter a code."
+      }
+    }
+  },
+  "storeFinder": {
+    "title": "Find Your Nearest Store",
+    "subtitle": "Enter your location to find the closest Jiva Prodi store",
+    "searchPlaceholder": "Enter your address",
+    "useMyLocation": "📍 Find Stores Near Me",
+    "noResults": "No stores found in this area. Please try a different location.",
+    "error": "Unable to find stores. Please try again later.",
+    "stores": "Stores"
+  },
+  "prizes": {
+    "title": "Available Prizes",
+    "subtitle": "Win amazing prizes with your promotion codes",
+    "tShirts": {
+      "title": "T-Shirts",
+      "description": "Limited edition Jiva Prodi merchandise"
+    },
+    "caps": {
+      "title": "Caps",
+      "description": "Stylish Jiva Prodi caps"
+    },
+    "waterBottles": {
+      "title": "Water Bottles",
+      "description": "Durable Jiva Prodi water bottles"
+    },
+    "majorPrizes": {
+      "title": "Agricultural Equipment",
+      "description": "Complete set of high-quality agricultural tools"
+    },
+    "instantWin": "Instant Win",
+    "rafflePrize": "Raffle Prize",
+    "total": "Total",
+    "remaining": "Remaining"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about the Jiva Prodi Harvest Champions",
+    "questions": [
+      {
+        "question": "How do I participate in the promotion?",
+        "answer": "To participate, you need to: 1) Register on our website, 2) Purchase Jiva Prodi products from authorized stores, 3) Enter the promotion codes from your purchases to win prizes."
+      },
+      {
+        "question": "Where can I find promotion codes?",
+        "answer": "Promotion codes are printed on the packaging of participating Jiva Prodi products. Each code is 8 characters long."
+      },
+      {
+        "question": "How do I enter my promotion code?",
+        "answer": "After registering, go to the 'Enter Code' section and input your 8-digit code. The system will validate your code and if valid, you'll be directed to the prize wheel."
+      },
+      {
+        "question": "What prizes can I win?",
+        "answer": "You can win various prizes including T-shirts, caps, water bottles, and other Jiva Prodi merchandise. Some codes may also give you a chance to win major prizes."
+      },
+      {
+        "question": "How do I claim my prize?",
+        "answer": "After winning a prize, you'll receive instructions on how to claim it. Most prizes can be collected from your nearest Jiva Prodi store."
+      },
+      {
+        "question": "How long do I have to claim my prize?",
+        "answer": "Prizes must be claimed within 30 days of winning. After this period, the prize will be forfeited."
+      },
+      {
+        "question": "Can I participate if I'm not a farmer?",
+        "answer": "Yes! The Jiva Prodi Harvest Champions promotion is open to everyone who purchases participating products, regardless of their profession."
+      }
+    ],
+    "contact": {
+      "title": "Need More Help?",
+      "description": "If you have any other questions, please contact our support team:",
+      "phone": "Call us at +62 21 1234 5678",
+      "email": "Email us at support@jivaprodi.com"
+    }
+  },
+  "prizeWheel": {
+    "title": "Spin to Win!",
+    "subtitle": "Try your luck and win exciting prizes",
+    "spinButton": "Spin the Wheel",
+    "spinning": "Spinning...",
+    "congratulations": "Congratulations!",
+    "betterLuck": "Better Luck Next Time",
+    "tryAgain": "Don't worry, you can try again!",
+    "prize": {
+      "won": "You won a"
+    }
+  },
+  "promoCodes": {
+    "title": "Available Promo Codes",
+    "all": "All Codes",
+    "available": "Available",
+    "used": "Used",
+    "noCodes": "No promo codes found",
+    "howToUse": "How to Use Promo Codes",
+    "step1": "Purchase Jiva Prodi products from authorized stores",
+    "step2": "Find the 8-digit promo code on the product packaging",
+    "step3": "Enter the code in the 'Enter Code' section",
+    "step4": "Spin the wheel to win exciting prizes"
+  }
+} 

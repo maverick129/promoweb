@@ -1,0 +1,226 @@
+{
+  "common": {
+    "register": "Daftar Sekarang",
+    "findStore": "Cari Toko",
+    "enterCode": "Masukkan Kode",
+    "prizes": "Hadiah",
+    "faq": "FAQ",
+    "continue": "Lanjut",
+    "back": "Kembali",
+    "submit": "Kirim",
+    "verify": "Verifikasi",
+    "resend": "Kirim Ulang",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "loading": "Memuat...",
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "error": "Terjadi kesalahan. Silakan coba lagi.",
+    "success": "Berhasil!",
+    "tryAgain": "Coba Lagi",
+    "close": "Tutup",
+    "required": "Field ini wajib diisi"
+  },
+  "navigation": {
+    "home": "Beranda",
+    "findStore": "Cari Toko",
+    "enterCode": "Masukkan Kode",
+    "prizes": "Hadiah",
+    "faq": "FAQ"
+  },
+  "home": {
+    "title": "Jiva Prodi Harvest Champions",
+    "subtitle": "Bergabunglah dengan promosi pertanian terbesar di Indonesia dan menangkan hadiah menarik!",
+    "competitions": {
+      "title": "Kompetisi Menarik",
+      "dailyPrizes": {
+        "title": "Hadiah Harian",
+        "description": "Menangkan hadiah instan setiap hari dengan kode promo yang valid"
+      },
+      "communityEvents": {
+        "title": "Acara Komunitas",
+        "description": "Bergabunglah dengan acara dan kompetisi khusus bersama petani lainnya"
+      },
+      "seasonalRewards": {
+        "title": "Hadiah Musiman",
+        "description": "Ikuti kompetisi musiman untuk hadiah yang lebih besar"
+      }
+    },
+    "howToParticipate": {
+      "title": "Cara Berpartisipasi",
+      "register": {
+        "title": "1. Daftar",
+        "description": "Buat akun dan verifikasi detail Anda untuk mulai berpartisipasi."
+      },
+      "findStore": {
+        "title": "2. Cari Toko",
+        "description": "Temukan toko Jiva Prodi terdekat untuk membeli produk."
+      },
+      "enterCode": {
+        "title": "3. Masukkan Kode",
+        "description": "Masukkan kode promo dari pembelian Anda untuk memenangkan hadiah."
+      }
+    },
+    "prizes": {
+      "title": "Hadiah Menarik Menanti",
+      "tShirts": {
+        "title": "Kaos",
+        "description": "Merchandise Jiva Prodi edisi terbatas"
+      },
+      "majorPrizes": {
+        "title": "Hadiah Utama",
+        "description": "Peralatan dan alat pertanian"
+      },
+      "caps": {
+        "title": "Topi",
+        "description": "Topi Jiva Prodi yang stylish"
+      },
+      "waterBottles": {
+        "title": "Botol Air",
+        "description": "Botol air Jiva Prodi yang tahan lama"
+      }
+    }
+  },
+  "register": {
+    "title": "Bergabunglah dengan Harvest Champions",
+    "subtitle": "Daftar untuk berpartisipasi dalam kampanye Jiva Prodi Harvest Champions",
+    "form": {
+      "name": "Nama Lengkap",
+      "namePlaceholder": "Masukkan nama lengkap Anda",
+      "phone": "Nomor Telepon",
+      "phonePlaceholder": "Masukkan nomor telepon Anda",
+      "location": {
+        "label": "Lokasi Anda",
+        "description": "Kami membutuhkan lokasi Anda untuk menemukan toko terdekat",
+        "getLocation": "Gunakan Lokasi Saya",
+        "gettingLocation": "Mendapatkan lokasi Anda...",
+        "success": "Lokasi berhasil diperoleh",
+        "error": "Tidak dapat mendapatkan lokasi Anda. Silakan aktifkan layanan lokasi di pengaturan browser Anda.",
+        "notSupported": "Browser Anda tidak mendukung layanan lokasi",
+        "manual": "Atau masukkan lokasi Anda secara manual",
+        "address": "Alamat",
+        "addressPlaceholder": "Masukkan alamat Anda",
+        "city": "Kota",
+        "cityPlaceholder": "Masukkan kota Anda",
+        "province": "Provinsi",
+        "provincePlaceholder": "Masukkan provinsi Anda"
+      },
+      "submit": "Daftar Sekarang",
+      "error": "Pendaftaran gagal. Silakan coba lagi.",
+      "success": "Pendaftaran berhasil! Mengarahkan..."
+    }
+  },
+  "codeEntry": {
+    "title": "Masukkan Kode Anda",
+    "subtitle": "Masukkan kode 8 digit dari produk Jiva Prodi Anda untuk memenangkan hadiah",
+    "step1": "Masukkan kode 8 digit dari produk Jiva Prodi Anda",
+    "form": {
+      "code": "Kode Promo",
+      "codePlaceholder": "Masukkan kode 8 digit",
+      "submit": "Validasi Kode",
+      "error": {
+        "invalid": "Kode tidak valid. Silakan periksa dan coba lagi.",
+        "used": "Kode ini sudah digunakan.",
+        "format": "Kode harus terdiri dari 8 karakter dan hanya boleh berisi karakter yang valid (2-9, A-H, J-N, P-Z).",
+        "required": "Silakan masukkan kode."
+      }
+    }
+  },
+  "storeFinder": {
+    "title": "Temukan Toko Terdekat",
+    "subtitle": "Masukkan lokasi Anda untuk menemukan toko Jiva Prodi terdekat",
+    "searchPlaceholder": "Masukkan alamat Anda",
+    "useMyLocation": "📍 Temukan Toko di Sekitar Saya",
+    "noResults": "Tidak ada toko yang ditemukan di area ini. Silakan coba lokasi lain.",
+    "error": "Tidak dapat menemukan toko. Silakan coba lagi nanti.",
+    "stores": "Toko"
+  },
+  "prizes": {
+    "title": "Hadiah Tersedia",
+    "subtitle": "Menangkan hadiah menarik dengan kode promo Anda",
+    "tShirts": {
+      "title": "Kaos",
+      "description": "Merchandise Jiva Prodi edisi terbatas"
+    },
+    "caps": {
+      "title": "Topi",
+      "description": "Topi Jiva Prodi yang stylish"
+    },
+    "waterBottles": {
+      "title": "Botol Air",
+      "description": "Botol air Jiva Prodi yang tahan lama"
+    },
+    "majorPrizes": {
+      "title": "Peralatan Pertanian",
+      "description": "Set lengkap peralatan pertanian berkualitas tinggi"
+    },
+    "instantWin": "Menang Instan",
+    "rafflePrize": "Hadiah Undian",
+    "total": "Total",
+    "remaining": "Tersisa"
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "subtitle": "Temukan jawaban untuk pertanyaan umum tentang Jiva Prodi Harvest Champions",
+    "questions": [
+      {
+        "question": "Bagaimana cara berpartisipasi dalam promosi?",
+        "answer": "Untuk berpartisipasi, Anda perlu: 1) Mendaftar di website kami, 2) Membeli produk Jiva Prodi dari toko resmi, 3) Masukkan kode promo dari pembelian Anda untuk memenangkan hadiah."
+      },
+      {
+        "question": "Di mana saya bisa menemukan kode promo?",
+        "answer": "Kode promo tercetak pada kemasan produk Jiva Prodi yang berpartisipasi. Setiap kode terdiri dari 8 karakter."
+      },
+      {
+        "question": "Bagaimana cara memasukkan kode promo saya?",
+        "answer": "Setelah mendaftar, buka bagian 'Masukkan Kode' dan masukkan kode 8 digit Anda. Sistem akan memvalidasi kode Anda dan jika valid, Anda akan diarahkan ke roda hadiah."
+      },
+      {
+        "question": "Hadiah apa yang bisa saya menangkan?",
+        "answer": "Anda bisa memenangkan berbagai hadiah termasuk kaos, topi, botol air, dan merchandise Jiva Prodi lainnya. Beberapa kode juga memberi Anda kesempatan untuk memenangkan hadiah utama."
+      },
+      {
+        "question": "Bagaimana cara mengklaim hadiah saya?",
+        "answer": "Setelah memenangkan hadiah, Anda akan menerima instruksi tentang cara mengklaimnya. Sebagian besar hadiah dapat diambil dari toko Jiva Prodi terdekat."
+      },
+      {
+        "question": "Berapa lama waktu yang saya miliki untuk mengklaim hadiah?",
+        "answer": "Hadiah harus diklaim dalam waktu 30 hari setelah menang. Setelah periode ini, hadiah akan hangus."
+      },
+      {
+        "question": "Apakah saya bisa berpartisipasi jika saya bukan petani?",
+        "answer": "Ya! Promosi Jiva Prodi Harvest Champions terbuka untuk semua orang yang membeli produk yang berpartisipasi, terlepas dari profesi mereka."
+      }
+    ],
+    "contact": {
+      "title": "Butuh Bantuan Lebih Lanjut?",
+      "description": "Jika Anda memiliki pertanyaan lain, silakan hubungi tim dukungan kami:",
+      "phone": "Hubungi kami di +62 21 1234 5678",
+      "email": "Email kami di support@jivaprodi.com"
+    }
+  },
+  "prizeWheel": {
+    "title": "Putar untuk Menang!",
+    "subtitle": "Coba keberuntunganmu dan menangkan hadiah menarik",
+    "spinButton": "Putar Roda",
+    "spinning": "Memutar...",
+    "congratulations": "Selamat!",
+    "betterLuck": "Semoga Beruntung Lain Kali",
+    "tryAgain": "Jangan khawatir, kamu bisa mencoba lagi!",
+    "prize": {
+      "won": "Kamu memenangkan"
+    }
+  },
+  "promoCodes": {
+    "title": "Kode Promo Tersedia",
+    "all": "Semua Kode",
+    "available": "Tersedia",
+    "used": "Sudah Digunakan",
+    "noCodes": "Tidak ada kode promo yang ditemukan",
+    "howToUse": "Cara Menggunakan Kode Promo",
+    "step1": "Beli produk Jiva Prodi dari toko resmi",
+    "step2": "Temukan kode promo 8 digit pada kemasan produk",
+    "step3": "Masukkan kode di bagian 'Masukkan Kode'",
+    "step4": "Putar roda untuk memenangkan hadiah menarik"
+  }
+} 

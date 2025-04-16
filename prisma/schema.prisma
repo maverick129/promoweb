@@ -1,0 +1,63 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Prize {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  type        String   // "instant" or "raffle"
+  probability Float
+  quantity    Int
+  remaining   Int
+  claimed     Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  wins        Win[]
+}
+
+model Win {
+  id        String   @id @default(cuid())
+  prizeId   String
+  prize     Prize    @relation(fields: [prizeId], references: [id])
+  claimed   Boolean  @default(false)
+  claimedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Code {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  location  Location @relation(fields: [locationId], references: [id])
+  locationId String  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  lat       Float
+  lng       Float
+  address   String
+  city      String
+  province  String
+  user      User?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
