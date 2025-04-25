@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { FaMapMarkerAlt, FaSearch, FaExclamationTriangle, FaSpinner } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaExclamationTriangle, FaSpinner } from 'react-icons/fa'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import dynamic from 'next/dynamic'
@@ -39,7 +39,7 @@ export default function StoreFinder() {
   const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt')
   const [currentPage, setCurrentPage] = useState(1)
   const storesPerPage = 5
-  const [searchLocation, setSearchLocation] = useState<[number, number] | null>(null)
+  const [, setSearchLocation] = useState<[number, number] | null>(null);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null)
 
   // Helper function to validate Indonesian and Singaporean phone numbers
@@ -71,48 +71,13 @@ export default function StoreFinder() {
     })
   }, [])
 
-  useEffect(() => {
-    // Load stores from API
-    const fetchStores = async () => {
-      try {
-        const response = await fetch('/api/stores')
-        if (!response.ok) throw new Error('Failed to fetch stores')
-        const data = await response.json()
-        
-        // If user location is available, sort stores by distance
-        if (userLocation) {
-          const storesWithDistances = data.map((store: Store) => {
-            const distance = calculateDistance(
-              userLocation[0],
-              userLocation[1],
-              store.latitude,
-              store.longitude
-            )
-            return { ...store, distance }
-          })
-          
-          // Sort stores by distance
-          const sortedStores = [...storesWithDistances].sort((a, b) => 
-            (a.distance || Infinity) - (b.distance || Infinity)
-          )
-          
-          setStores(sortedStores)
-        } else {
-          setStores(data)
-        }
-      } catch (err) {
-        setError('Failed to load stores')
-        console.error('Error fetching stores:', err)
-      } finally {
-        setLoading(false)
-      }
+  // Helper function to calculate distance between two points in kilometers
+  const calculateDistance = useCallback((lat1: number, lon1: number, lat2: number, lon2: number) => {
+
+    const toRad = (value: number) => {
+      return value * Math.PI / 180
     }
 
-    fetchStores()
-  }, [userLocation]) // Add userLocation as dependency
-
-  // Helper function to calculate distance between two points in kilometers
-  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371 // Earth's radius in kilometers
     const dLat = toRad(lat2 - lat1)
     const dLon = toRad(lon2 - lon1)
@@ -122,11 +87,7 @@ export default function StoreFinder() {
       Math.sin(dLon/2) * Math.sin(dLon/2)
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
     return R * c
-  }
-
-  const toRad = (value: number) => {
-    return value * Math.PI / 180
-  }
+  }, [])
 
   const handleUseMyLocation = () => {
     setLoading(true)
@@ -137,7 +98,7 @@ export default function StoreFinder() {
         const { latitude, longitude } = position.coords
         setUserLocation([latitude, longitude])
         setSearchLocation([latitude, longitude])
-        
+
         // Calculate distances for all stores
         const storesWithDistances = stores.map(store => {
           const distance = calculateDistance(
@@ -148,7 +109,7 @@ export default function StoreFinder() {
           )
           return { ...store, distance }
         })
-        
+
         // Sort stores by distance
         const sortedStores = [...storesWithDistances].sort((a, b) => 
           (a.distance || Infinity) - (b.distance || Infinity)
@@ -182,6 +143,46 @@ export default function StoreFinder() {
       }
     )
   }
+
+  useEffect(() => {
+    // Load stores from API
+    const fetchStores = async () => {
+      try {
+        const response = await fetch('/api/stores')
+        if (!response.ok) throw new Error('Failed to fetch stores')
+        const data = await response.json()
+
+        // If user location is available, sort stores by distance
+        if (userLocation) {
+          const storesWithDistances = data.map((store: Store) => {
+            const distance = calculateDistance(
+              userLocation[0],
+              userLocation[1],
+              store.latitude,
+              store.longitude
+            )
+            return { ...store, distance }
+          })
+
+          // Sort stores by distance
+          const sortedStores = [...storesWithDistances].sort((a, b) => 
+            (a.distance || Infinity) - (b.distance || Infinity)
+          )
+
+          setStores(sortedStores)
+        } else {
+          setStores(data)
+        }
+      } catch (err) {
+        setError('Failed to load stores')
+        console.error('Error fetching stores:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStores()
+  }, [userLocation, calculateDistance]) // Add userLocation as dependency
 
   const handleAddressSearch = async () => {
     if (!searchQuery.trim()) return
@@ -263,8 +264,6 @@ export default function StoreFinder() {
   const indexOfFirstStore = indexOfLastStore - storesPerPage
   const currentStores = filteredStores.slice(indexOfFirstStore, indexOfLastStore)
   const totalPages = Math.ceil(filteredStores.length / storesPerPage)
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
   const handleStoreSelect = (store: Store) => {
     setSelectedStore(store)

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import { FaCheck, FaTimes, FaSpinner } from 'react-icons/fa'
+import { FaSpinner } from 'react-icons/fa'
 
 interface PromoCode {
   code: string

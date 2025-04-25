@@ -1,4 +1,4 @@
-const generateCode = () => {
+const generateCode_1 = () => {
   const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
   let code = ''
   for (let i = 0; i < 8; i++) {
@@ -10,7 +10,7 @@ const generateCode = () => {
 const generateUniqueCodes = (count: number) => {
   const codes = new Set<string>()
   while (codes.size < count) {
-    codes.add(generateCode())
+    codes.add(generateCode_1())
   }
   return Array.from(codes)
 }

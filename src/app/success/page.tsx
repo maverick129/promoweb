@@ -2,11 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useLanguage } from '@/contexts/LanguageContext'
 
 export default function Success() {
   const router = useRouter()
-  const [countdown, setCountdown] = useState(5)
+  const [countdown] = useState(5)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,7 +38,7 @@ export default function Success() {
           Congratulations!
         </h1>
         <p className="text-lg text-gray-600 mb-6">
-          You've successfully won a prize! Our team will contact you shortly with details about your prize collection.
+          You&apos;ve successfully won a prize! Our team will contact you shortly with details about your prize collection.
         </p>
 
         <div className="bg-green-50 rounded-lg p-4 mb-6">

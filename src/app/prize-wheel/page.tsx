@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { FaSpinner } from 'react-icons/fa'
 import Header from '@/components/Header'
@@ -30,7 +29,6 @@ const prizeColors = {
 }
 
 export default function PrizeWheelPage() {
-  const router = useRouter()
   const { t } = useLanguage()
   const [prizes, setPrizes] = useState<Prize[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -121,7 +119,7 @@ export default function PrizeWheelPage() {
                 <p className="text-lg text-gray-700 mb-4">
                   {winner.name === 'Better Luck Next Time'
                     ? t('prizeWheel.tryAgain')
-                    : t('prizeWheel.wonPrize', { prize: winner.name })}
+                    : t(`prizeWheel.wonPrize.${winner.name}`)}
                 </p>
                 <div className="bg-green-50 p-4 rounded-lg">
                   <p className="text-green-800 font-medium">

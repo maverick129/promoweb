@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { FaTshirt, FaTrophy, FaMapMarkerAlt, FaTicketAlt, FaGift, FaUsers, FaCalendarAlt, FaTruck, FaSpinner, FaQuestionCircle } from 'react-icons/fa'
+import { FaTshirt, FaTrophy, FaMapMarkerAlt, FaGift, FaTruck, FaSpinner, FaQuestionCircle } from 'react-icons/fa'
 import { GiWheat, GiCorn, GiPlantRoots, GiSpray, GiFarmer } from 'react-icons/gi'
 import { MdCelebration } from 'react-icons/md'
 import { TbConfetti } from 'react-icons/tb'
@@ -94,13 +94,13 @@ export default function Home() {
             const data = await response.json()
             const locationString = data.display_name || `${position.coords.latitude}, ${position.coords.longitude}`
             setFormData(prev => ({ ...prev, location: locationString }))
-          } catch (error) {
+          } catch {
             setError(t('codeEntry.form.error.locationFailed'))
           } finally {
             setIsGettingLocation(false)
           }
         },
-        (error) => {
+        () => {
           setError(t('codeEntry.form.error.locationDenied'))
           setIsGettingLocation(false)
         }

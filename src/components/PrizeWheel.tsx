@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import confetti from 'canvas-confetti'
 import { useLanguage } from '@/contexts/LanguageContext'
+import Image from 'next/image'
 
 interface Prize {
   id: string
@@ -30,11 +31,7 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
   const [winner, setWinner] = useState<Prize | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  useEffect(() => {
-    drawWheel()
-  }, [prizes])
-
-  const drawWheel = () => {
+  const drawWheel = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas || prizes.length === 0) return
 
@@ -45,10 +42,8 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     const centerY = canvas.height / 2
     const radius = Math.min(centerX, centerY) - 10
 
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    // Draw segments
     const segmentAngle = (2 * Math.PI) / prizes.length
     prizes.forEach((prize, index) => {
       const startAngle = index * segmentAngle
@@ -59,11 +54,9 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
       ctx.arc(centerX, centerY, radius, startAngle, endAngle)
       ctx.closePath()
 
-      // Fill segment
       ctx.fillStyle = prize.color
       ctx.fill()
 
-      // Add text
       ctx.save()
       ctx.translate(centerX, centerY)
       ctx.rotate(startAngle + segmentAngle / 2)
@@ -74,12 +67,15 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
       ctx.restore()
     })
 
-    // Draw center circle
     ctx.beginPath()
     ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI)
     ctx.fillStyle = '#4B5563'
     ctx.fill()
-  }
+  }, [prizes])
+
+  useEffect(() => {
+    drawWheel()
+  }, [drawWheel])
 
   const spin = () => {
     if (isSpinning || prizes.length === 0) return
@@ -106,7 +102,7 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     const finalRotation = 360 * 5 + (270 - (prizeIndex * segmentAngle + segmentAngle / 2))
 
     // Animate rotation
-    let currentRotation = rotation % 360
+    const currentRotation = rotation % 360
     const startTime = Date.now()
     const duration = 5000 // 5 seconds
 
@@ -188,7 +184,7 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
       <div className="flex items-center gap-12">
         {/* Logo */}
         <div className="hidden md:block w-48 h-48 bg-green-50 rounded-full flex items-center justify-center shadow-lg p-4">
-          <img 
+          <Image
             src="/images/jivaphala-logo.png" 
             alt="Jivaphala Logo" 
             className="w-full h-full object-contain rounded-full border-4 border-green-600"
