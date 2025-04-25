@@ -3,43 +3,77 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(request: Request) {
   try {
-    const { code } = await request.json()
+    const { code, name, phone, location } = await request.json()
 
-    // Find the code in the database
-    const promotionCode = await prisma.code.findUnique({
+    // Validate input
+    if (!code || !name || !phone || !location) {
+      return NextResponse.json(
+        { error: 'All fields are required' },
+        { status: 400 }
+      )
+    }
+
+    // Check if code exists and is unused
+    const promoCode = await prisma.promoCode.findUnique({
       where: { code: code.toUpperCase() }
     })
 
-    // If code doesn't exist
-    if (!promotionCode) {
+    if (!promoCode) {
       return NextResponse.json(
-        { error: 'Invalid promotion code' },
+        { error: 'Invalid code' },
         { status: 400 }
       )
     }
 
-    // If code has already been used
-    if (promotionCode.used) {
+    if (promoCode.used) {
       return NextResponse.json(
-        { error: 'This code has already been used' },
+        { error: 'Code has already been used' },
         { status: 400 }
       )
     }
 
-    // Mark code as used
-    await prisma.code.update({
-      where: { id: promotionCode.id },
-      data: {
-        used: true,
-        usedAt: new Date()
-      }
+    // Start a transaction to update code and create raffle ticket
+    const result = await prisma.$transaction(async (tx) => {
+      // Mark code as used
+      await tx.promoCode.update({
+        where: { id: promoCode.id },
+        data: { used: true }
+      })
+
+      // Create raffle ticket
+      const raffleTicket = await tx.raffleTicket.create({
+        data: {
+          code: code.toUpperCase(),
+          phone,
+          status: 'PENDING'
+        }
+      })
+
+      // Create or update user location
+      const userLocation = await tx.location.create({
+        data: {
+          address: location,
+          lat: 0, // You might want to parse these from the location string if available
+          lng: 0,
+          city: '', // These could be parsed from the location string if needed
+          province: '',
+          user: {
+            create: {
+              name,
+              phone
+            }
+          }
+        }
+      })
+
+      return { raffleTicket, userLocation }
     })
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Error validating code:', error)
+    console.error('Error in validate-code:', error)
     return NextResponse.json(
-      { error: 'An error occurred while validating the code' },
+      { error: 'An error occurred while processing your request' },
       { status: 500 }
     )
   }

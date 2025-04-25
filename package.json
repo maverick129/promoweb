@@ -10,12 +10,16 @@
     "postinstall": "prisma generate",
     "postbuild": "prisma generate",
     "type-check": "tsc --noEmit",
-    "validate-env": "ts-node scripts/validate-env.ts"
+    "validate-env": "ts-node scripts/validate-env.ts",
+    "prisma:seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
+    "@react-google-maps/api": "^2.20.6",
     "@types/canvas-confetti": "^1.9.0",
+    "@types/google.maps": "^3.58.1",
     "@types/leaflet": "^1.9.17",
+    "canvas": "^3.1.0",
     "canvas-confetti": "^1.9.3",
     "dotenv": "^16.5.0",
     "leaflet": "^1.9.4",

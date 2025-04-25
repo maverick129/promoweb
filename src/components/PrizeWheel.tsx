@@ -1,13 +1,21 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import confetti from 'canvas-confetti'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface Prize {
   id: string
   name: string
   description: string
+  type: string
   probability: number
+  quantity: number
+  remaining: number
+  claimed: number
   color: string
+  textColor: string
+  symbol: string
 }
 
 interface PrizeWheelProps {
@@ -16,182 +24,226 @@ interface PrizeWheelProps {
 }
 
 export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) {
+  const { t } = useLanguage()
+  const [isSpinning, setIsSpinning] = useState(false)
+  const [rotation, setRotation] = useState(0)
+  const [winner, setWinner] = useState<Prize | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const spinTimeoutRef = useRef<NodeJS.Timeout>()
-  const currentRotationRef = useRef(0)
-  const isSpinningRef = useRef(false)
 
   useEffect(() => {
+    drawWheel()
+  }, [prizes])
+
+  const drawWheel = () => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || prizes.length === 0) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Set canvas size
-    const size = Math.min(canvas.parentElement?.clientWidth || 400, 400)
-    canvas.width = size
-    canvas.height = size
+    const centerX = canvas.width / 2
+    const centerY = canvas.height / 2
+    const radius = Math.min(centerX, centerY) - 10
 
-    // Calculate angles based on probabilities
-    const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0)
-    let currentAngle = 0
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    // Draw segments
+    const segmentAngle = (2 * Math.PI) / prizes.length
     prizes.forEach((prize, index) => {
-      const angle = (prize.probability / totalProbability) * Math.PI * 2
-      const startAngle = currentAngle
-      const endAngle = currentAngle + angle
+      const startAngle = index * segmentAngle
+      const endAngle = startAngle + segmentAngle
 
-      // Draw segment
       ctx.beginPath()
-      ctx.moveTo(size / 2, size / 2)
-      ctx.arc(size / 2, size / 2, size / 2, startAngle, endAngle)
+      ctx.moveTo(centerX, centerY)
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle)
       ctx.closePath()
+
+      // Fill segment
       ctx.fillStyle = prize.color
       ctx.fill()
 
-      // Draw text
+      // Add text
       ctx.save()
-      ctx.translate(size / 2, size / 2)
-      ctx.rotate(startAngle + angle / 2)
-      ctx.textAlign = 'right'
-      ctx.fillStyle = '#fff'
-      ctx.font = 'bold 12px Arial'
-      ctx.fillText(prize.name, size / 2 - 10, 0)
+      ctx.translate(centerX, centerY)
+      ctx.rotate(startAngle + segmentAngle / 2)
+      ctx.textAlign = 'center'
+      ctx.fillStyle = prize.textColor
+      ctx.font = 'bold 48px Arial'
+      ctx.fillText(prize.symbol, radius - 60, 0)
       ctx.restore()
-
-      currentAngle = endAngle
     })
 
     // Draw center circle
     ctx.beginPath()
-    ctx.arc(size / 2, size / 2, 20, 0, Math.PI * 2)
-    ctx.fillStyle = '#fff'
+    ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI)
+    ctx.fillStyle = '#4B5563'
     ctx.fill()
-    ctx.strokeStyle = '#000'
-    ctx.lineWidth = 2
-    ctx.stroke()
-
-    return () => {
-      if (spinTimeoutRef.current) {
-        clearTimeout(spinTimeoutRef.current)
-      }
-    }
-  }, [prizes])
+  }
 
   const spin = () => {
-    if (isSpinningRef.current) return
-    isSpinningRef.current = true
+    if (isSpinning || prizes.length === 0) return
 
-    const canvas = canvasRef.current
-    if (!canvas) return
+    setIsSpinning(true)
+    setWinner(null)
 
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    // Calculate winning prize
+    const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0)
+    let random = Math.random() * totalProbability
+    let winningPrize = prizes[0]
 
-    const size = canvas.width
-    const spinDuration = 3000 // 3 seconds
+    for (const prize of prizes) {
+      random -= prize.probability
+      if (random <= 0) {
+        winningPrize = prize
+        break
+      }
+    }
+
+    // Calculate final rotation
+    const prizeIndex = prizes.findIndex(p => p.id === winningPrize.id)
+    const segmentAngle = 360 / prizes.length
+    const finalRotation = 360 * 5 + (270 - (prizeIndex * segmentAngle + segmentAngle / 2))
+
+    // Animate rotation
+    let currentRotation = rotation % 360
     const startTime = Date.now()
-    const startRotation = currentRotationRef.current
-    const spinRevolutions = 5 // Number of full rotations
-    const finalRotation = Math.random() * Math.PI * 2
+    const duration = 5000 // 5 seconds
 
     const animate = () => {
-      const currentTime = Date.now()
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / spinDuration, 1)
+      const now = Date.now()
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
 
-      // Easing function for smooth deceleration
+      // Easing function (cubic ease-out)
       const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
+      const currentProgress = easeOut(progress)
 
-      const rotation =
-        startRotation +
-        easeOut(progress) * (spinRevolutions * Math.PI * 2 + finalRotation)
-
-      currentRotationRef.current = rotation
-
-      // Clear and redraw
-      ctx.clearRect(0, 0, size, size)
-      ctx.save()
-      ctx.translate(size / 2, size / 2)
-      ctx.rotate(rotation)
-      ctx.translate(-size / 2, -size / 2)
-
-      // Redraw wheel
-      const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0)
-      let currentAngle = 0
-
-      prizes.forEach((prize) => {
-        const angle = (prize.probability / totalProbability) * Math.PI * 2
-        const startAngle = currentAngle
-        const endAngle = currentAngle + angle
-
-        ctx.beginPath()
-        ctx.moveTo(size / 2, size / 2)
-        ctx.arc(size / 2, size / 2, size / 2, startAngle, endAngle)
-        ctx.closePath()
-        ctx.fillStyle = prize.color
-        ctx.fill()
-
-        ctx.save()
-        ctx.translate(size / 2, size / 2)
-        ctx.rotate(startAngle + angle / 2)
-        ctx.textAlign = 'right'
-        ctx.fillStyle = '#fff'
-        ctx.font = 'bold 12px Arial'
-        ctx.fillText(prize.name, size / 2 - 10, 0)
-        ctx.restore()
-
-        currentAngle = endAngle
-      })
-
-      ctx.restore()
-
-      // Draw center circle
-      ctx.beginPath()
-      ctx.arc(size / 2, size / 2, 20, 0, Math.PI * 2)
-      ctx.fillStyle = '#fff'
-      ctx.fill()
-      ctx.strokeStyle = '#000'
-      ctx.lineWidth = 2
-      ctx.stroke()
+      const newRotation = currentRotation + (finalRotation * currentProgress)
+      setRotation(newRotation)
 
       if (progress < 1) {
         requestAnimationFrame(animate)
       } else {
-        isSpinningRef.current = false
-        // Determine winning prize
-        const normalizedRotation = rotation % (Math.PI * 2)
-        let currentAngle = 0
-        let winningPrize = prizes[0]
-
-        for (const prize of prizes) {
-          const angle = (prize.probability / totalProbability) * Math.PI * 2
-          if (normalizedRotation >= currentAngle && normalizedRotation < currentAngle + angle) {
-            winningPrize = prize
-            break
-          }
-          currentAngle += angle
-        }
-
+        setIsSpinning(false)
+        setWinner(winningPrize)
         onSpinComplete(winningPrize)
+        if (winningPrize.name !== 'Better Luck Next Time') {
+          launchConfetti()
+        }
       }
     }
 
     requestAnimationFrame(animate)
   }
 
+  const launchConfetti = () => {
+    const duration = 3 * 1000
+    const animationEnd = Date.now() + duration
+    const defaults = {
+      startVelocity: 30,
+      spread: 360,
+      ticks: 60,
+      zIndex: 9999,
+      colors: ['#FFD700', '#FFA500', '#FF69B4', '#00FF00', '#00FFFF']
+    }
+
+    const randomInRange = (min: number, max: number) => {
+      return Math.random() * (max - min) + min
+    }
+
+    const launchConfetti = () => {
+      confetti({
+        ...defaults,
+        particleCount: 50,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      })
+      confetti({
+        ...defaults,
+        particleCount: 50,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      })
+    }
+
+    launchConfetti()
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now()
+      if (timeLeft <= 0) {
+        clearInterval(interval)
+        return
+      }
+      launchConfetti()
+    }, 250)
+  }
+
   return (
-    <div className="relative">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full"
-        onClick={spin}
-        style={{ cursor: 'pointer' }}
-      />
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-        <div className="w-4 h-4 bg-red-500"></div>
+    <div className="flex flex-col items-center">
+      {winner && (
+        <div className="mt-4 p-4 bg-green-100 rounded-lg text-center">
+          <p className="text-lg font-semibold text-green-800">
+            {t('prizeWheel.winningMessage')} {t(`prizes.${winner.type}.${winner.id}.name`)}
+          </p>
+        </div>
+      )}
+      <div className="flex items-center gap-12">
+        {/* Logo */}
+        <div className="hidden md:block w-48 h-48 bg-green-50 rounded-full flex items-center justify-center shadow-lg p-4">
+          <img 
+            src="/images/jivaphala-logo.png" 
+            alt="Jivaphala Logo" 
+            className="w-full h-full object-contain rounded-full border-4 border-green-600"
+            onError={(e) => {
+              // Fallback if image doesn't exist
+              const target = e.target as HTMLImageElement
+              target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIiBmaWxsPSIjMTY2NTM0Ii8+PHBhdGggZD0iTTEyIDZ2MTJNNiAxMmgxMiIgc3Ryb2tlPSIjRkNEMzREIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=='
+            }}
+          />
+        </div>
+
+        {/* Wheel */}
+        <div className="relative w-[400px] h-[400px]">
+          <canvas
+            ref={canvasRef}
+            width={400}
+            height={400}
+            className="transform"
+            style={{
+              transform: `rotate(${rotation}deg)`,
+              transition: isSpinning ? 'none' : 'transform 0.3s ease-out'
+            }}
+          />
+          
+          {/* Pointer */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2">
+            <div className="w-0 h-0 border-l-[20px] border-r-[20px] border-t-[40px] border-l-transparent border-r-transparent border-t-red-600"></div>
+          </div>
+        </div>
       </div>
+
+      <button
+        onClick={spin}
+        disabled={isSpinning}
+        className={`mt-8 px-8 py-4 text-xl font-bold rounded-full shadow-lg transform transition-all relative overflow-hidden ${
+          isSpinning
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 hover:from-purple-500 hover:via-pink-600 hover:to-red-600 hover:scale-105 active:scale-95'
+        } text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2`}
+      >
+        <span className="flex items-center gap-2">
+          {isSpinning ? (
+            t('common.loading')
+          ) : (
+            <>
+              <span className="text-2xl">🦄</span>
+              <span>{t('prizeWheel.spinButton')}</span>
+              <span className="text-2xl">🌈</span>
+            </>
+          )}
+        </span>
+        {!isSpinning && (
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 opacity-0 hover:opacity-20 transition-opacity duration-300"></div>
+        )}
+      </button>
     </div>
   )
 } 

@@ -6,8 +6,6 @@ import idTranslations from '@/translations/id.json'
 
 type Language = 'en' | 'id'
 
-type Translations = typeof enTranslations
-
 const translations = {
   en: enTranslations,
   id: idTranslations,
@@ -26,17 +24,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const t = (key: string): string => {
     const keys = key.split('.')
-    let value: any = translations[language]
-    
+    let value: Record<string, unknown> | string = translations[language]
+
     for (const k of keys) {
       if (value && typeof value === 'object') {
-        value = value[k]
+        value = value[k] as Record<string, unknown> | string
       } else {
         return key
       }
     }
-    
-    return value || key
+
+    return value as string || key
   }
 
   return (

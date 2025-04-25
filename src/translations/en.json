@@ -15,18 +15,23 @@
     "loading": "Loading...",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "error": "An error occurred. Please try again.",
-    "success": "Success!",
+    "error": "An error occurred",
+    "success": "Success",
     "tryAgain": "Try Again",
     "close": "Close",
-    "required": "This field is required"
+    "required": "This field is required",
+    "search": "Search",
+    "noResults": "No results found"
   },
   "navigation": {
     "home": "Home",
-    "findStore": "Find Store",
+    "findStore": "Find Stores",
     "enterCode": "Enter Code",
     "prizes": "Prizes",
-    "faq": "FAQ"
+    "faq": "FAQs",
+    "language": "Language",
+    "back": "Back to Home",
+    "viewProducts": "View Jiva Prodi Range"
   },
   "home": {
     "title": "Jiva Prodi Harvest Champions",
@@ -108,57 +113,91 @@
       "terms": "I agree to the terms and conditions",
       "submit": "Register Now",
       "error": "Registration failed. Please try again.",
-      "success": "Registration successful! Redirecting..."
+      "success": "Registration successful! Redirecting...",
+      "otp": "Enter OTP",
+      "sendOtp": "Send OTP"
     }
   },
   "codeEntry": {
     "title": "Enter Your Code",
-    "subtitle": "Enter the 8-digit code from your Jiva Prodi product to win prizes",
-    "step1": "Enter the 8-digit code from your Jiva Prodi product",
+    "subtitle": "Enter your promotion code to participate in the competition",
     "form": {
       "code": "Promotion Code",
       "codePlaceholder": "Enter 8-digit code",
-      "submit": "Validate Code",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "location": "Location",
+      "locationPlaceholder": "Enter your location",
+      "getLocation": "Get My Location",
+      "submit": "Submit",
       "error": {
-        "invalid": "Invalid code. Please check and try again.",
-        "used": "This code has already been used.",
-        "format": "Code must be 8 characters long and contain only valid characters (2-9, A-H, J-N, P-Z).",
-        "required": "Please enter a code."
+        "format": "Please enter a valid 8-digit code",
+        "phoneFormat": "Please enter a valid phone number",
+        "locationFailed": "Failed to get location",
+        "locationDenied": "Location access denied",
+        "locationNotSupported": "Location services not supported",
+        "invalid": "Invalid code. Please try again."
       }
     }
   },
   "storeFinder": {
     "title": "Find Your Nearest Store",
     "subtitle": "Enter your location to find the closest Jiva Prodi store",
-    "searchPlaceholder": "Enter your address",
+    "search": {
+      "label": "Search for a store",
+      "placeholder": "Enter your address",
+      "button": "Search"
+    },
     "useMyLocation": "📍 Find Stores Near Me",
     "noResults": "No stores found in this area. Please try a different location.",
     "error": "Unable to find stores. Please try again later.",
     "stores": "Stores"
   },
   "prizes": {
-    "title": "Available Prizes",
-    "subtitle": "Win amazing prizes with your promotion codes",
+    "title": "Prizes",
+    "subtitle": "Win amazing prizes with Jiva Prodi",
+    "instantWin": "Instant Win",
+    "rafflePrize": "Raffle Prize",
+    "dailyPrize": "Daily Prize",
+    "communityEvent": "Community Event",
+    "seasonalReward": "Seasonal Reward",
+    "total": "Total",
+    "remaining": "Remaining",
     "tShirts": {
       "title": "T-Shirts",
-      "description": "Limited edition Jiva Prodi merchandise"
+      "description": "Limited edition Jiva Prodi T-Shirts featuring Indonesian farmers"
     },
     "caps": {
       "title": "Caps",
-      "description": "Stylish Jiva Prodi caps"
+      "description": "Stylish caps perfect for working in the fields"
     },
     "waterBottles": {
       "title": "Water Bottles",
-      "description": "Durable Jiva Prodi water bottles"
+      "description": "Durable water bottles to keep you hydrated"
     },
     "majorPrizes": {
-      "title": "Agricultural Equipment",
-      "description": "Complete set of high-quality agricultural tools"
+      "title": "Major Prizes",
+      "description": "Win farming equipment and tools"
     },
-    "instantWin": "Instant Win",
-    "rafflePrize": "Raffle Prize",
-    "total": "Total",
-    "remaining": "Remaining"
+    "dailyPrizes": {
+      "title": "Daily Prizes",
+      "description": "Special prizes available every day for active farmers"
+    },
+    "communityEvents": {
+      "title": "Community Events",
+      "description": "Join community events and win exclusive prizes"
+    },
+    "seasonalRewards": {
+      "title": "Seasonal Rewards",
+      "description": "Special rewards for each farming season"
+    },
+    "redeemed": "Redeemed Prizes",
+    "noPrizes": "No prizes available",
+    "redeem": "Redeem",
+    "redeemedOn": "Redeemed on",
+    "error": "Error loading prizes"
   },
   "faq": {
     "title": "Frequently Asked Questions",
@@ -191,6 +230,18 @@
       {
         "question": "Can I participate if I'm not a farmer?",
         "answer": "Yes! The Jiva Prodi Harvest Champions promotion is open to everyone who purchases participating products, regardless of their profession."
+      },
+      {
+        "question": "How do I redeem my prize?",
+        "answer": "After winning, you can redeem your prize at any participating Jiva store. Use the store finder to locate the nearest store."
+      },
+      {
+        "question": "Can I use the same code multiple times?",
+        "answer": "No, each code can only be used once. If you try to use a code that has already been used, you will receive an error message."
+      },
+      {
+        "question": "What if I don't win anything?",
+        "answer": "Don't worry! You can try again with a new code from another Jiva product. Better luck next time!"
       }
     ],
     "contact": {
@@ -201,16 +252,14 @@
     }
   },
   "prizeWheel": {
-    "title": "Spin to Win!",
-    "subtitle": "Try your luck and win exciting prizes",
-    "spinButton": "Spin the Wheel",
-    "spinning": "Spinning...",
-    "congratulations": "Congratulations!",
+    "title": "Spin to Win",
+    "subtitle": "Try your luck and win amazing prizes!",
+    "congratulations": "Congratulations! 🎉",
     "betterLuck": "Better Luck Next Time",
-    "tryAgain": "Don't worry, you can try again!",
-    "prize": {
-      "won": "You won a"
-    }
+    "wonPrize": "You've won a {prize}!",
+    "tryAgain": "Don't worry, try again with another code!",
+    "raffleEntry": "You're Now in the Raffle! 🎟️",
+    "raffleDescription": "Your entry has been recorded. Winners will be announced soon. Keep your phone handy!"
   },
   "promoCodes": {
     "title": "Available Promo Codes",

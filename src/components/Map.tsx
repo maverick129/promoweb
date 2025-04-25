@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { ReactNode } from 'react'
 
 interface Store {
   id: string
@@ -14,12 +16,20 @@ interface Store {
   latitude: number
   longitude: number
   distance?: number
+  phone: string
 }
 
 interface MapProps {
   userLocation: [number, number] | null
   stores: Store[]
   onStoreSelect?: (store: Store) => void
+  center?: {
+    lat: number
+    lng: number
+  }
+  zoom?: number
+  className?: string
+  children?: ReactNode
 }
 
 // Custom store marker icon
@@ -59,23 +69,18 @@ const createPulsingIcon = (icon: L.Icon) => {
   return pulsingIcon
 }
 
-// Dynamically import the MapContainer and other components
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-)
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-)
+// Fix for default marker icons in Leaflet with Next.js
+const DefaultIcon = L.icon({
+  iconUrl: '/images/marker-icon.png',
+  iconRetinaUrl: '/images/marker-icon-2x.png',
+  shadowUrl: '/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
+
+L.Marker.prototype.options.icon = DefaultIcon
 
 // Create a wrapper component for the map content
 const MapContentWrapper = dynamic(
@@ -158,7 +163,7 @@ const MapContentWrapper = dynamic(
   { ssr: false }
 )
 
-export default function Map({ userLocation, stores, onStoreSelect }: MapProps) {
+export default function Map({ userLocation, stores, onStoreSelect, center, zoom = 13, className = 'h-[400px] w-full' }: MapProps) {
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -167,6 +172,7 @@ export default function Map({ userLocation, stores, onStoreSelect }: MapProps) {
 
   // Default to Jakarta if no location is available
   const defaultCenter: [number, number] = [-6.2088, 106.8456]
+  const mapCenter: [number, number] = center ? [center.lat, center.lng] : (userLocation || defaultCenter)
 
   if (!isClient) {
     return (
@@ -177,10 +183,10 @@ export default function Map({ userLocation, stores, onStoreSelect }: MapProps) {
   }
 
   return (
-    <div className="h-[400px] w-full">
+    <div className={className}>
       <MapContainer
-        center={userLocation || defaultCenter}
-        zoom={13}
+        center={mapCenter}
+        zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         zoomControl={true}
         scrollWheelZoom={true}

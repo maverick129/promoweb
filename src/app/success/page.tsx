@@ -9,18 +9,11 @@ export default function Success() {
   const [countdown, setCountdown] = useState(5)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          router.push('/code-entry')
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
+    const timer = setTimeout(() => {
+      router.push('/')
+    }, 5000)
 
-    return () => clearInterval(timer)
+    return () => clearTimeout(timer)
   }, [router])
 
   return (
@@ -61,7 +54,7 @@ export default function Success() {
         </div>
 
         <p className="text-sm text-gray-500">
-          Redirecting to code entry in {countdown} seconds...
+          Redirecting to home page in {countdown} seconds...
         </p>
       </div>
     </div>

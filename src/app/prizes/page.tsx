@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { FaGift, FaTshirt, FaHatCowboy, FaWater, FaTractor } from 'react-icons/fa'
+import { FaGift, FaTshirt, FaHatCowboy, FaWater, FaTractor, FaCalendarAlt, FaUsers } from 'react-icons/fa'
 import Image from 'next/image'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -11,7 +11,7 @@ interface Prize {
   id: string
   name: string
   description: string
-  type: 'instant' | 'raffle'
+  type: 'instant' | 'raffle' | 'daily' | 'community' | 'seasonal'
   icon: React.ReactNode
   image: string
   quantity: number
@@ -29,7 +29,7 @@ export default function Prizes() {
       description: t('prizes.tShirts.description'),
       type: 'instant',
       icon: <FaTshirt className="w-12 h-12" />,
-      image: '/prizes/tshirt.jpg',
+      image: '/images/farmers/tshirt-farmer.jpg',
       quantity: 1000,
       remaining: 750
     },
@@ -39,7 +39,7 @@ export default function Prizes() {
       description: t('prizes.caps.description'),
       type: 'instant',
       icon: <FaHatCowboy className="w-12 h-12" />,
-      image: '/prizes/cap.jpg',
+      image: '/images/farmers/cap-farmer.jpg',
       quantity: 1500,
       remaining: 1200
     },
@@ -49,7 +49,7 @@ export default function Prizes() {
       description: t('prizes.waterBottles.description'),
       type: 'instant',
       icon: <FaWater className="w-12 h-12" />,
-      image: '/prizes/water-bottle.jpg',
+      image: '/images/farmers/water-bottle-farmer.jpg',
       quantity: 2000,
       remaining: 1500
     },
@@ -59,9 +59,39 @@ export default function Prizes() {
       description: t('prizes.majorPrizes.description'),
       type: 'raffle',
       icon: <FaTractor className="w-12 h-12" />,
-      image: '/prizes/equipment.jpg',
+      image: '/images/farmers/equipment-farmer.jpg',
       quantity: 50,
       remaining: 50
+    },
+    {
+      id: '5',
+      name: t('prizes.dailyPrizes.title'),
+      description: t('prizes.dailyPrizes.description'),
+      type: 'daily',
+      icon: <FaCalendarAlt className="w-12 h-12" />,
+      image: '/images/farmers/daily-farmer.jpg',
+      quantity: 30,
+      remaining: 30
+    },
+    {
+      id: '6',
+      name: t('prizes.communityEvents.title'),
+      description: t('prizes.communityEvents.description'),
+      type: 'community',
+      icon: <FaUsers className="w-12 h-12" />,
+      image: '/images/farmers/community-farmer.jpg',
+      quantity: 20,
+      remaining: 20
+    },
+    {
+      id: '7',
+      name: t('prizes.seasonalRewards.title'),
+      description: t('prizes.seasonalRewards.description'),
+      type: 'seasonal',
+      icon: <FaGift className="w-12 h-12" />,
+      image: '/images/farmers/seasonal-farmer.jpg',
+      quantity: 10,
+      remaining: 10
     }
   ]
 
@@ -88,9 +118,18 @@ export default function Prizes() {
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => setSelectedPrize(prize)}
             >
-              <div className="h-48 bg-gray-200 flex items-center justify-center">
-                <div className="w-24 h-24 text-green-600">
-                  {prize.icon}
+              <div className="h-48 relative">
+                <Image
+                  src={prize.image}
+                  alt={prize.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                  <div className="w-24 h-24 text-white">
+                    {prize.icon}
+                  </div>
                 </div>
               </div>
               <div className="p-6">
@@ -101,9 +140,23 @@ export default function Prizes() {
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     prize.type === 'instant'
                       ? 'bg-green-100 text-green-800'
-                      : 'bg-blue-100 text-blue-800'
+                      : prize.type === 'raffle'
+                      ? 'bg-blue-100 text-blue-800'
+                      : prize.type === 'daily'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : prize.type === 'community'
+                      ? 'bg-purple-100 text-purple-800'
+                      : 'bg-orange-100 text-orange-800'
                   }`}>
-                    {prize.type === 'instant' ? t('prizes.instantWin') : t('prizes.rafflePrize')}
+                    {prize.type === 'instant' 
+                      ? t('prizes.instantWin')
+                      : prize.type === 'raffle'
+                      ? t('prizes.rafflePrize')
+                      : prize.type === 'daily'
+                      ? t('prizes.dailyPrize')
+                      : prize.type === 'community'
+                      ? t('prizes.communityEvent')
+                      : t('prizes.seasonalReward')}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4">{prize.description}</p>
@@ -143,16 +196,28 @@ export default function Prizes() {
                     </svg>
                   </button>
                 </div>
-                <div className="h-64 bg-gray-200 flex items-center justify-center mb-4">
-                  <div className="w-32 h-32 text-green-600">
-                    {selectedPrize.icon}
-                  </div>
+                <div className="h-64 relative mb-4">
+                  <Image
+                    src={selectedPrize.image}
+                    alt={selectedPrize.name}
+                    fill
+                    className="object-cover rounded-lg"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
                 <p className="text-gray-600 mb-4">{selectedPrize.description}</p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <span className="font-medium">Type:</span>{' '}
-                    {selectedPrize.type === 'instant' ? 'Instant Win' : 'Raffle Prize'}
+                    {selectedPrize.type === 'instant' 
+                      ? 'Instant Win'
+                      : selectedPrize.type === 'raffle'
+                      ? 'Raffle Prize'
+                      : selectedPrize.type === 'daily'
+                      ? 'Daily Prize'
+                      : selectedPrize.type === 'community'
+                      ? 'Community Event'
+                      : 'Seasonal Reward'}
                   </div>
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <span className="font-medium">Total Available:</span>{' '}

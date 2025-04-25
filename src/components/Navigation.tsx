@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FaHome, FaStore, FaTicketAlt, FaGift, FaQuestionCircle, FaGlobe } from 'react-icons/fa'
+import { FaHome, FaStore, FaGift, FaQuestionCircle, FaGlobe, FaArrowLeft } from 'react-icons/fa'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { useState, useRef, useEffect } from 'react'
 
@@ -17,6 +17,13 @@ export default function Navigation() {
   const languages = [
     { code: 'en', name: 'English', flag: '🇬🇧' },
     { code: 'id', name: 'Indonesia', flag: '🇮🇩' }
+  ]
+
+  const navigationItems = [
+    { name: 'home', href: '/', icon: FaHome, translationKey: 'navigation.home' },
+    { name: 'storeFinder', href: '/store-finder', icon: FaStore, translationKey: 'navigation.findStore' },
+    { name: 'prizes', href: '/prizes', icon: FaGift, translationKey: 'navigation.prizes' },
+    { name: 'faq', href: '/faq', icon: FaQuestionCircle, translationKey: 'navigation.faq' }
   ]
 
   useEffect(() => {
@@ -34,62 +41,33 @@ export default function Navigation() {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
-          <div className="flex space-x-8">
-            <Link
-              href="/"
-              className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                isActive('/')
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              }`}
-            >
-              <FaHome className="mr-2" />
-              {t('navigation.home')}
-            </Link>
-            <Link
-              href="/store-finder"
-              className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                isActive('/store-finder')
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              }`}
-            >
-              <FaStore className="mr-2" />
-              {t('navigation.findStore')}
-            </Link>
-            <Link
-              href="/code-entry"
-              className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                isActive('/code-entry')
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              }`}
-            >
-              <FaTicketAlt className="mr-2" />
-              {t('navigation.enterCode')}
-            </Link>
-            <Link
-              href="/prizes"
-              className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                isActive('/prizes')
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              }`}
-            >
-              <FaGift className="mr-2" />
-              {t('navigation.prizes')}
-            </Link>
-            <Link
-              href="/faq"
-              className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                isActive('/faq')
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-              }`}
-            >
-              <FaQuestionCircle className="mr-2" />
-              {t('navigation.faq')}
-            </Link>
+          <div className="flex items-center space-x-8">
+            {pathname !== '/' && (
+              <Link
+                href="/"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              >
+                <FaArrowLeft className="mr-2" />
+                {t('navigation.back')}
+              </Link>
+            )}
+            {navigationItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                    isActive(item.href)
+                      ? 'border-green-500 text-green-600'
+                      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  }`}
+                >
+                  <Icon className="mr-2" />
+                  {t(item.translationKey)}
+                </Link>
+              )
+            })}
           </div>
           <div className="flex items-center">
             <div className="relative" ref={dropdownRef}>
@@ -108,7 +86,7 @@ export default function Navigation() {
                       <button
                         key={lang.code}
                         onClick={() => {
-                          setLanguage(lang.code as 'en' | 'id' | 'hi')
+                          setLanguage(lang.code as 'en' | 'id')
                           setIsOpen(false)
                         }}
                         className={`w-full text-left px-4 py-2 text-sm flex items-center ${

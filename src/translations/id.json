@@ -19,14 +19,18 @@
     "success": "Berhasil!",
     "tryAgain": "Coba Lagi",
     "close": "Tutup",
-    "required": "Field ini wajib diisi"
+    "required": "Field ini wajib diisi",
+    "search": "Cari",
+    "noResults": "Tidak ada hasil yang ditemukan"
   },
   "navigation": {
     "home": "Beranda",
     "findStore": "Cari Toko",
     "enterCode": "Masukkan Kode",
     "prizes": "Hadiah",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "back": "Kembali ke Beranda",
+    "viewProducts": "Lihat Jiva Prodi Range"
   },
   "home": {
     "title": "Jiva Prodi Harvest Champions",
@@ -112,52 +116,79 @@
   },
   "codeEntry": {
     "title": "Masukkan Kode Anda",
-    "subtitle": "Masukkan kode 8 digit dari produk Jiva Prodi Anda untuk memenangkan hadiah",
-    "step1": "Masukkan kode 8 digit dari produk Jiva Prodi Anda",
+    "subtitle": "Masukkan kode promosi Anda untuk berpartisipasi dalam kompetisi",
     "form": {
-      "code": "Kode Promo",
+      "code": "Kode Promosi",
       "codePlaceholder": "Masukkan kode 8 digit",
-      "submit": "Validasi Kode",
+      "name": "Nama Lengkap",
+      "namePlaceholder": "Masukkan nama lengkap Anda",
+      "phone": "Nomor Telepon",
+      "phonePlaceholder": "Masukkan nomor telepon Anda",
+      "location": "Lokasi",
+      "locationPlaceholder": "Masukkan lokasi Anda",
+      "getLocation": "Dapatkan Lokasi Saya",
+      "submit": "Kirim",
       "error": {
-        "invalid": "Kode tidak valid. Silakan periksa dan coba lagi.",
-        "used": "Kode ini sudah digunakan.",
-        "format": "Kode harus terdiri dari 8 karakter dan hanya boleh berisi karakter yang valid (2-9, A-H, J-N, P-Z).",
-        "required": "Silakan masukkan kode."
+        "format": "Silakan masukkan kode 8 digit yang valid",
+        "phoneFormat": "Silakan masukkan nomor telepon yang valid",
+        "locationFailed": "Gagal mendapatkan lokasi",
+        "locationDenied": "Akses lokasi ditolak",
+        "locationNotSupported": "Layanan lokasi tidak didukung",
+        "invalid": "Kode tidak valid. Silakan coba lagi."
       }
     }
   },
   "storeFinder": {
     "title": "Temukan Toko Terdekat",
     "subtitle": "Masukkan lokasi Anda untuk menemukan toko Jiva Prodi terdekat",
-    "searchPlaceholder": "Masukkan alamat Anda",
+    "search": {
+      "label": "Cari toko",
+      "placeholder": "Masukkan alamat Anda",
+      "button": "Cari"
+    },
     "useMyLocation": "📍 Temukan Toko di Sekitar Saya",
     "noResults": "Tidak ada toko yang ditemukan di area ini. Silakan coba lokasi lain.",
     "error": "Tidak dapat menemukan toko. Silakan coba lagi nanti.",
     "stores": "Toko"
   },
   "prizes": {
-    "title": "Hadiah Tersedia",
-    "subtitle": "Menangkan hadiah menarik dengan kode promo Anda",
+    "title": "Hadiah",
+    "subtitle": "Menangkan hadiah menarik bersama Jiva Prodi",
+    "instantWin": "Menang Instan",
+    "rafflePrize": "Hadiah Undian",
+    "dailyPrize": "Hadiah Harian",
+    "communityEvent": "Acara Komunitas",
+    "seasonalReward": "Hadiah Musiman",
+    "total": "Total",
+    "remaining": "Tersisa",
     "tShirts": {
       "title": "Kaos",
-      "description": "Merchandise Jiva Prodi edisi terbatas"
+      "description": "Kaos Jiva Prodi edisi terbatas dengan desain petani Indonesia"
     },
     "caps": {
       "title": "Topi",
-      "description": "Topi Jiva Prodi yang stylish"
+      "description": "Topi bergaya yang ideal untuk bekerja di ladang"
     },
     "waterBottles": {
       "title": "Botol Air",
-      "description": "Botol air Jiva Prodi yang tahan lama"
+      "description": "Botol air tahan lama untuk menjaga Anda tetap terhidrasi"
     },
     "majorPrizes": {
-      "title": "Peralatan Pertanian",
-      "description": "Set lengkap peralatan pertanian berkualitas tinggi"
+      "title": "Hadiah Utama",
+      "description": "Menangkan peralatan dan alat pertanian"
     },
-    "instantWin": "Menang Instan",
-    "rafflePrize": "Hadiah Undian",
-    "total": "Total",
-    "remaining": "Tersisa"
+    "dailyPrizes": {
+      "title": "Hadiah Harian",
+      "description": "Hadiah khusus setiap hari untuk petani aktif"
+    },
+    "communityEvents": {
+      "title": "Acara Komunitas",
+      "description": "Ikuti acara komunitas dan menangkan hadiah khusus"
+    },
+    "seasonalRewards": {
+      "title": "Hadiah Musiman",
+      "description": "Hadiah khusus untuk setiap musim tanam"
+    }
   },
   "faq": {
     "title": "Pertanyaan yang Sering Diajukan",
