@@ -124,13 +124,14 @@
       "namePlaceholder": "Masukkan nama lengkap Anda",
       "phone": "Nomor Telepon",
       "phonePlaceholder": "Masukkan nomor telepon Anda",
+      "isdCode": "Kode Negara",
       "location": "Lokasi",
       "locationPlaceholder": "Masukkan lokasi Anda",
       "getLocation": "Dapatkan Lokasi Saya",
       "submit": "Kirim",
       "error": {
         "format": "Silakan masukkan kode 8 digit yang valid",
-        "phoneFormat": "Silakan masukkan nomor telepon yang valid",
+        "phoneFormat": "Silakan masukkan nomor telepon yang valid untuk kode negara yang dipilih",
         "locationFailed": "Gagal mendapatkan lokasi",
         "locationDenied": "Akses lokasi ditolak",
         "locationNotSupported": "Layanan lokasi tidak didukung",
@@ -154,8 +155,66 @@
   "prizes": {
     "title": "Hadiah",
     "subtitle": "Menangkan hadiah menarik bersama Jiva Prodi",
-    "instantWin": "Menang Instan",
-    "rafflePrize": "Hadiah Undian",
+    "instantWin": "Hadiah Menang Instan",
+    "rafflePrize": "Hadiah Undian Utama",
+    "grandPrize": "HADIAH UTAMA",
+    "instantPrizes": {
+      "sojikyo5kg": {
+        "title": "SOJIKYO 5 KG",
+        "description": "Beras berkualitas premium untuk kebutuhan sehari-hari"
+      },
+      "sprayer": {
+        "title": "Jiva Sprayer 2L",
+        "description": "Sprayer profesional untuk kebutuhan pertanian Anda"
+      },
+      "tshirt": {
+        "title": "Kaos Jiva",
+        "description": "Kaos Jiva yang nyaman dan stylish"
+      },
+      "hat": {
+        "title": "Topi Jiva",
+        "description": "Lindungi diri Anda dengan gaya menggunakan topi kami"
+      },
+      "voucher20k": {
+        "title": "Voucher Jiva Toko",
+        "description": "Kredit toko Rp 20.000"
+      },
+      "voucher50k": {
+        "title": "Voucher Jiva Toko",
+        "description": "Kredit toko Rp 50.000"
+      },
+      "voucher100k": {
+        "title": "Voucher Jiva Toko",
+        "description": "Kredit toko Rp 100.000"
+      }
+    },
+    "rafflePrizes": {
+      "cash": {
+        "title": "Uang Tunai",
+        "description": "Hadiah uang tunai Rp 20.000.000",
+        "drawingDate": "Pengundian Hadiah Utama: 31 Januari 2025"
+      },
+      "phone": {
+        "title": "Samsung Galaxy S22",
+        "description": "Smartphone flagship terbaru dari Samsung",
+        "drawingDate": "Tanggal Pengundian: 31 Januari 2025"
+      },
+      "sojikyo300kg": {
+        "title": "SOJIKYO 300-KG",
+        "description": "Persediaan beras berkualitas premium",
+        "drawingDate": "Tanggal Pengundian: 31 Januari 2025"
+      },
+      "tv": {
+        "title": "TV 40\"",
+        "description": "Televisi pintar definisi tinggi",
+        "drawingDate": "Tanggal Pengundian: 31 Januari 2025"
+      },
+      "voucher2m": {
+        "title": "Voucher Jiva Toko",
+        "description": "Kredit toko Rp 2.000.000",
+        "drawingDate": "Tanggal Pengundian: 31 Januari 2025"
+      }
+    },
     "dailyPrize": "Hadiah Harian",
     "communityEvent": "Acara Komunitas",
     "seasonalReward": "Hadiah Musiman",

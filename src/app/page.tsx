@@ -2,13 +2,45 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { FaTshirt, FaTrophy, FaMapMarkerAlt, FaTicketAlt, FaGift, FaUsers, FaCalendarAlt, FaTruck, FaSpinner, FaQuestionCircle } from 'react-icons/fa'
-import { GiWheat, GiCorn, GiPlantRoots, GiSpray, GiFarmer } from 'react-icons/gi'
-import { MdCelebration } from 'react-icons/md'
-import { TbConfetti } from 'react-icons/tb'
+import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
 import Footer from '@/components/Footer'
-import Link from 'next/link'
+
+// Icons
+import { 
+  FaTshirt, 
+  FaTrophy, 
+  FaMapMarkerAlt, 
+  FaTicketAlt, 
+  FaGift, 
+  FaUsers, 
+  FaCalendarAlt, 
+  FaTruck, 
+  FaSpinner, 
+  FaQuestionCircle, 
+  FaBox, 
+  FaHatCowboy, 
+  FaMoneyBillWave, 
+  FaMobileAlt, 
+  FaTv 
+} from 'react-icons/fa'
+
+import { 
+  GiWheat, 
+  GiCorn, 
+  GiPlantRoots, 
+  GiSpray, 
+  GiFarmer, 
+  GiPlantSeed, 
+  GiFruitTree, 
+  GiSeedling, 
+  GiGrain, 
+  GiPlantWatering, 
+  GiFarmTractor 
+} from 'react-icons/gi'
+
+import { MdCelebration } from 'react-icons/md'
+import { TbConfetti } from 'react-icons/tb'
 
 export default function Home() {
   const router = useRouter()
@@ -16,6 +48,7 @@ export default function Home() {
   const [formData, setFormData] = useState({
     code: '',
     name: '',
+    isdCode: '+62', // Default to Indonesia
     phone: '',
     location: ''
   })
@@ -36,7 +69,8 @@ export default function Home() {
     }
 
     // Validate phone number (basic validation)
-    if (!/^\d{10,12}$/.test(formData.phone)) {
+    const fullPhoneNumber = formData.isdCode + formData.phone
+    if (!/^\+62\d{10,12}$|^\+91\d{10}$|^\+65\d{8}$/.test(fullPhoneNumber)) {
       setError(t('codeEntry.form.error.phoneFormat'))
       setIsLoading(false)
       return
@@ -48,7 +82,10 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          phone: fullPhoneNumber
+        }),
       })
 
       const data = await response.json()
@@ -66,7 +103,7 @@ export default function Home() {
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     if (name === 'code') {
       // Allow only alphanumeric characters and convert to uppercase for code
@@ -114,76 +151,47 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 flex flex-col">
       <div className="max-w-7xl mx-auto px-4 py-8 flex-grow">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-12 relative overflow-hidden">
-          {/* Floating Icons */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 left-1/4 animate-float">
-              <GiWheat className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute top-1/3 right-1/4 animate-float-delay-1">
-              <GiCorn className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute bottom-1/4 left-1/3 animate-float-delay-2">
-              <GiPlantRoots className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute top-1/2 right-1/3 animate-float-delay-3">
-              <GiSpray className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute bottom-1/3 left-1/2 animate-float-delay-4">
-              <FaTruck className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute top-1/5 right-1/5 animate-float-delay-5">
-              <GiFarmer className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute bottom-1/5 left-1/5 animate-float-delay-6">
-              <MdCelebration className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute top-2/3 right-1/6 animate-float-delay-7">
-              <TbConfetti className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute top-1/6 left-1/6 animate-float-delay-8">
-              <GiCorn className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
-            <div className="absolute bottom-1/6 right-1/6 animate-float-delay-9">
-              <GiWheat className="w-12 h-12 text-green-400 opacity-20" />
-            </div>
+        <main className="flex-grow">
+          {/* Hero Section */}
+          <div className="w-full">
+            <img
+              src="/images/promo.png"
+              alt="Promo Header"
+              className="w-full h-auto"
+            />
           </div>
 
-          <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              {t('home.title')}
-            </h1>
-            <p className="text-lg mb-6 text-white">
-              {t('home.subtitle')}
-            </p>
-            <div className="flex justify-center gap-4 mt-8">
-              <Link
-                href="/store-finder"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                <FaMapMarkerAlt className="mr-2" />
-                {t('navigation.findStore')}
-              </Link>
-              <Link
-                href="/faq"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                <FaQuestionCircle className="mr-2" />
-                {t('navigation.faq')}
-              </Link>
-              <Link
-                href="https://www.myinstants.com/en/instant/darth-vader-nooooooooo/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              >
-                <FaGift className="mr-2" />
-                {t('navigation.viewProducts')}
-              </Link>
+          {/* CTA Buttons Section */}
+          <div className="bg-white py-6">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/store-finder"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-md"
+                >
+                  <FaMapMarkerAlt className="mr-2" />
+                  {t('navigation.findStore')}
+                </Link>
+                <Link
+                  href="/faq"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-md"
+                >
+                  <FaQuestionCircle className="mr-2" />
+                  {t('navigation.faq')}
+                </Link>
+                <Link
+                  href="https://www.jivapetani.co.id/jivaprodi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-green-700 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-md"
+                >
+                  <FaGift className="mr-2" />
+                  {t('navigation.viewProducts')}
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
+        </main>
 
         {/* Code Entry Section */}
         <div className="max-w-6xl mx-auto px-4 py-16">
@@ -197,8 +205,8 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="bg-white bg-opacity-60 py-8 px-6 rounded-lg shadow-md max-w-2xl mx-auto">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-white bg-opacity-60 py-4 sm:py-8 px-4 sm:px-6 rounded-lg shadow-md max-w-2xl mx-auto">
+            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="code" className="block text-sm font-medium text-gray-700">
                   {t('codeEntry.form.code')} *
@@ -212,7 +220,7 @@ export default function Home() {
                     maxLength={8}
                     value={formData.code}
                     onChange={handleInputChange}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-center text-xl tracking-widest uppercase"
+                    className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-center text-lg sm:text-xl tracking-widest uppercase"
                     placeholder={t('codeEntry.form.codePlaceholder')}
                     disabled={isLoading}
                     autoComplete="off"
@@ -232,7 +240,7 @@ export default function Home() {
                     required
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t('codeEntry.form.namePlaceholder')}
                     disabled={isLoading}
                   />
@@ -243,7 +251,19 @@ export default function Home() {
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                   {t('codeEntry.form.phone')} *
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 flex flex-col sm:flex-row gap-2">
+                  <select
+                    id="isdCode"
+                    name="isdCode"
+                    value={formData.isdCode}
+                    onChange={handleInputChange}
+                    className="block w-full sm:w-24 px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    disabled={isLoading}
+                  >
+                    <option value="+62">+62 (ID)</option>
+                    <option value="+91">+91 (IN)</option>
+                    <option value="+65">+65 (SG)</option>
+                  </select>
                   <input
                     type="tel"
                     id="phone"
@@ -251,7 +271,7 @@ export default function Home() {
                     required
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t('codeEntry.form.phonePlaceholder')}
                     disabled={isLoading}
                   />
@@ -262,7 +282,7 @@ export default function Home() {
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">
                   {t('codeEntry.form.location')} *
                 </label>
-                <div className="mt-1 flex gap-2">
+                <div className="mt-1 flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     id="location"
@@ -270,7 +290,7 @@ export default function Home() {
                     required
                     value={formData.location}
                     onChange={handleInputChange}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="block w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                     placeholder={t('codeEntry.form.locationPlaceholder')}
                     disabled={isLoading || isGettingLocation}
                   />
@@ -278,7 +298,7 @@ export default function Home() {
                     type="button"
                     onClick={getLocation}
                     disabled={isLoading || isGettingLocation}
-                    className="px-4 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400"
+                    className="px-3 sm:px-4 py-2 sm:py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400"
                   >
                     {isGettingLocation ? (
                       <FaSpinner className="motion-safe:animate-spin h-5 w-5" />
@@ -290,7 +310,7 @@ export default function Home() {
               </div>
 
               {error && (
-                <div className="rounded-md bg-red-50 p-4">
+                <div className="rounded-md bg-red-50 p-3 sm:p-4">
                   <div className="flex">
                     <div className="ml-3">
                       <h3 className="text-sm font-medium text-red-800">{error}</h3>
@@ -303,7 +323,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isLoading || formData.code.length !== 8 || !formData.name || !formData.phone || !formData.location}
-                  className={`w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+                  className={`w-full flex items-center justify-center py-2 sm:py-3 px-3 sm:px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                     isLoading || formData.code.length !== 8 || !formData.name || !formData.phone || !formData.location
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-green-600 hover:bg-green-700'
@@ -324,55 +344,190 @@ export default function Home() {
         </div>
 
         {/* Prizes Section */}
-        <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="py-12 px-4 sm:px-6 lg:px-8 bg-green-50">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-green-900 mb-12">
-              {t('home.prizes.title')}
+            <h2 className="text-4xl font-extrabold text-center text-green-900 mb-4">
+              {t('prizes.title')}
             </h2>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-              <div className="bg-white rounded-lg shadow-md p-6 text-center">
-                <div className="text-green-600 mb-4">
-                  <FaTshirt className="w-12 h-12 mx-auto" />
+            <div className="w-24 h-1 bg-green-600 mx-auto mb-12"></div>
+
+            {/* Instant Win Prizes */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold text-center text-green-800 mb-8">
+                {t('prizes.instantWin')}
+              </h3>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaBox className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.sojikyo5kg.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.sojikyo5kg.description')}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-green-900">
-                  {t('home.prizes.tShirts.title')}
-                </h3>
-                <p className="text-gray-600">
-                  {t('home.prizes.tShirts.description')}
-                </p>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <GiSpray className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.sprayer.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.sprayer.description')}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTshirt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.tshirt.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.tshirt.description')}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaHatCowboy className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.hat.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.hat.description')}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTicketAlt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.voucher20k.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.voucher20k.description')}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTicketAlt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.voucher50k.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.voucher50k.description')}
+                  </p>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTicketAlt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.instantPrizes.voucher100k.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.instantPrizes.voucher100k.description')}
+                  </p>
+                </div>
               </div>
-              <div className="bg-white rounded-lg shadow-md p-6 text-center">
-                <div className="text-green-600 mb-4">
-                  <FaTrophy className="w-12 h-12 mx-auto" />
+            </div>
+
+            {/* Raffle Prizes */}
+            <div>
+              <h3 className="text-2xl font-bold text-center text-green-800 mb-8">
+                {t('prizes.rafflePrize')}
+              </h3>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="relative bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="absolute -top-4 right-4">
+                    <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">
+                      {t('prizes.grandPrize')}
+                    </span>
+                  </div>
+                  <div className="text-green-600 mb-4">
+                    <FaMoneyBillWave className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.rafflePrizes.cash.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.rafflePrizes.cash.description')}
+                  </p>
+                  <div className="mt-4 text-sm text-green-700">
+                    {t('prizes.rafflePrizes.cash.drawingDate')}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-green-900">
-                  {t('home.prizes.caps.title')}
-                </h3>
-                <p className="text-gray-600">
-                  {t('home.prizes.caps.description')}
-                </p>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-6 text-center">
-                <div className="text-green-600 mb-4">
-                  <FaMapMarkerAlt className="w-12 h-12 mx-auto" />
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaMobileAlt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.rafflePrizes.phone.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.rafflePrizes.phone.description')}
+                  </p>
+                  <div className="mt-4 text-sm text-green-700">
+                    {t('prizes.rafflePrizes.phone.drawingDate')}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-green-900">
-                  {t('home.prizes.waterBottles.title')}
-                </h3>
-                <p className="text-gray-600">
-                  {t('home.prizes.waterBottles.description')}
-                </p>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-6 text-center">
-                <div className="text-green-600 mb-4">
-                  <FaTruck className="w-12 h-12 mx-auto" />
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaBox className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.rafflePrizes.sojikyo300kg.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.rafflePrizes.sojikyo300kg.description')}
+                  </p>
+                  <div className="mt-4 text-sm text-green-700">
+                    {t('prizes.rafflePrizes.sojikyo300kg.drawingDate')}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-green-900">
-                  {t('home.prizes.majorPrizes.title')}
-                </h3>
-                <p className="text-gray-600">
-                  {t('home.prizes.majorPrizes.description')}
-                </p>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTv className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.rafflePrizes.tv.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.rafflePrizes.tv.description')}
+                  </p>
+                  <div className="mt-4 text-sm text-green-700">
+                    {t('prizes.rafflePrizes.tv.drawingDate')}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 text-center transform transition-transform duration-300 hover:scale-105">
+                  <div className="text-green-600 mb-4">
+                    <FaTicketAlt className="w-12 h-12 mx-auto" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-green-900">
+                    {t('prizes.rafflePrizes.voucher2m.title')}
+                  </h3>
+                  <p className="text-gray-600">
+                    {t('prizes.rafflePrizes.voucher2m.description')}
+                  </p>
+                  <div className="mt-4 text-sm text-green-700">
+                    {t('prizes.rafflePrizes.voucher2m.drawingDate')}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

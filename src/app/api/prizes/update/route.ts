@@ -20,12 +20,11 @@ export async function POST(request: Request) {
     const updatedPrize = await prisma.prize.update({
       where: { id: prizeId },
       data: {
-        remaining: prize.remaining - 1,
-        claimed: prize.claimed + 1
+        remaining: Math.max(0, prize.remaining - 1),
       }
     })
 
-    return NextResponse.json(updatedPrize)
+    return NextResponse.json({ prize: updatedPrize })
   } catch (error) {
     console.error('Error updating prize:', error)
     return NextResponse.json({ error: 'Failed to update prize' }, { status: 500 })

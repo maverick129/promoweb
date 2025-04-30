@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import confetti from 'canvas-confetti'
 import { useLanguage } from '@/contexts/LanguageContext'
+import Winwheel from 'winwheel'
 
 interface Prize {
   id: string
@@ -26,115 +27,148 @@ interface PrizeWheelProps {
 export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) {
   const { t } = useLanguage()
   const [isSpinning, setIsSpinning] = useState(false)
-  const [rotation, setRotation] = useState(0)
   const [winner, setWinner] = useState<Prize | null>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isMounted, setIsMounted] = useState(false)
+  const wheelRef = useRef<HTMLCanvasElement>(null)
+  const winwheelRef = useRef<any>(null)
 
   useEffect(() => {
-    drawWheel()
-  }, [prizes])
+    setIsMounted(true)
+  }, [])
 
-  const drawWheel = () => {
-    const canvas = canvasRef.current
-    if (!canvas || prizes.length === 0) return
+  useEffect(() => {
+    if (!isMounted || !wheelRef.current) return
 
+    // Filter prizes to only include the specified ones
+    const filteredPrizes = prizes.filter(prize => [
+      'SOJIKYO 5 KG',
+      'Jiva Sprayer 2L',
+      'Jiva Tshirt',
+      'Jiva Hat',
+      'Jiva Toko Voucher Rp 20.000',
+      'Jiva Toko Voucher Rp 50.000',
+      'Jiva Toko Voucher Rp 100.000',
+      'Better Luck Next Time'
+    ].includes(prize.name))
+
+    // Create wheel segments
+    const segments = filteredPrizes.map((prize, index) => ({
+      fillStyle: prize.color,
+      text: prize.symbol,
+      textFontSize: 24,
+      textFillStyle: prize.textColor,
+      textFontFamily: 'Arial',
+      textFontWeight: 'bold',
+      textOrientation: 'vertical',
+      textAlignment: 'center',
+      textMargin: 5,
+      size: 1,
+      prize: prize,
+      segmentNumber: index + 1
+    }))
+
+    // Initialize the wheel
+    const canvas = wheelRef.current
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const centerX = canvas.width / 2
-    const centerY = canvas.height / 2
-    const radius = Math.min(centerX, centerY) - 10
+    // Set canvas dimensions
+    canvas.width = 400
+    canvas.height = 400
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    // Draw segments
-    const segmentAngle = (2 * Math.PI) / prizes.length
-    prizes.forEach((prize, index) => {
-      const startAngle = index * segmentAngle
-      const endAngle = startAngle + segmentAngle
-
-      ctx.beginPath()
-      ctx.moveTo(centerX, centerY)
-      ctx.arc(centerX, centerY, radius, startAngle, endAngle)
-      ctx.closePath()
-
-      // Fill segment
-      ctx.fillStyle = prize.color
-      ctx.fill()
-
-      // Add text
-      ctx.save()
-      ctx.translate(centerX, centerY)
-      ctx.rotate(startAngle + segmentAngle / 2)
-      ctx.textAlign = 'center'
-      ctx.fillStyle = prize.textColor
-      ctx.font = 'bold 48px Arial'
-      ctx.fillText(prize.symbol, radius - 60, 0)
-      ctx.restore()
+    winwheelRef.current = new Winwheel({
+      canvasId: 'prize-wheel',
+      numSegments: segments.length,
+      segments: segments,
+      outerRadius: 170,
+      centerX: 200,
+      centerY: 200,
+      innerRadius: 0,
+      drawMode: 'code',
+      drawText: true,
+      textFontSize: 24,
+      textOrientation: 'vertical',
+      textAlignment: 'center',
+      textMargin: 5,
+      textFontFamily: 'Arial',
+      textFontWeight: 'bold',
+      textFillStyle: '#ffffff',
+      strokeStyle: '#000000',
+      lineWidth: 2,
+      clearTheCanvas: true,
+      animation: {
+        type: 'spinToStop',
+        duration: 5,
+        spins: 5,
+        callbackFinished: alertPrize,
+        callbackAfter: drawPointer
+      },
+      pointerAngle: 0,
+      ctx: ctx
     })
 
-    // Draw center circle
+    // Draw the pointer
+    drawPointer()
+
+    return () => {
+      if (winwheelRef.current) {
+        winwheelRef.current.stopAnimation()
+      }
+    }
+  }, [prizes, isMounted])
+
+  const drawPointer = () => {
+    if (!winwheelRef.current) return
+
+    const ctx = winwheelRef.current.ctx
+    ctx.strokeStyle = 'navy'
+    ctx.fillStyle = 'gold'
+    ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI)
-    ctx.fillStyle = '#4B5563'
+    ctx.moveTo(170, 5)
+    ctx.lineTo(230, 5)
+    ctx.lineTo(200, 40)
+    ctx.closePath()
+    ctx.stroke()
     ctx.fill()
   }
 
+  const alertPrize = (indicatedSegment: any) => {
+    const winningPrize = indicatedSegment.prize
+    setWinner(winningPrize)
+    onSpinComplete(winningPrize)
+    if (winningPrize.name !== 'Better Luck Next Time') {
+      launchConfetti()
+    }
+  }
+
   const spin = () => {
-    if (isSpinning || prizes.length === 0) return
+    if (isSpinning || !winwheelRef.current) return
 
     setIsSpinning(true)
     setWinner(null)
 
-    // Calculate winning prize
-    const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0)
+    // Calculate winning prize based on probabilities
+    const totalProbability = winwheelRef.current.segments.reduce((sum: number, segment: any) => 
+      sum + segment.prize.probability, 0)
     let random = Math.random() * totalProbability
-    let winningPrize = prizes[0]
+    let winningSegment = winwheelRef.current.segments[0]
 
-    for (const prize of prizes) {
-      random -= prize.probability
+    for (const segment of winwheelRef.current.segments) {
+      random -= segment.prize.probability
       if (random <= 0) {
-        winningPrize = prize
+        winningSegment = segment
         break
       }
     }
 
-    // Calculate final rotation
-    const prizeIndex = prizes.findIndex(p => p.id === winningPrize.id)
-    const segmentAngle = 360 / prizes.length
-    const finalRotation = 360 * 5 + (270 - (prizeIndex * segmentAngle + segmentAngle / 2))
-
-    // Animate rotation
-    let currentRotation = rotation % 360
-    const startTime = Date.now()
-    const duration = 5000 // 5 seconds
-
-    const animate = () => {
-      const now = Date.now()
-      const elapsed = now - startTime
-      const progress = Math.min(elapsed / duration, 1)
-
-      // Easing function (cubic ease-out)
-      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
-      const currentProgress = easeOut(progress)
-
-      const newRotation = currentRotation + (finalRotation * currentProgress)
-      setRotation(newRotation)
-
-      if (progress < 1) {
-        requestAnimationFrame(animate)
-      } else {
-        setIsSpinning(false)
-        setWinner(winningPrize)
-        onSpinComplete(winningPrize)
-        if (winningPrize.name !== 'Better Luck Next Time') {
-          launchConfetti()
-        }
-      }
-    }
-
-    requestAnimationFrame(animate)
+    // Calculate the angle to stop at
+    const segmentAngle = 360 / winwheelRef.current.segments.length
+    const targetAngle = 360 - (winningSegment.segmentNumber * segmentAngle + segmentAngle / 2)
+    
+    // Start the spin
+    winwheelRef.current.animation.stopAngle = targetAngle
+    winwheelRef.current.startAnimation()
   }
 
   const launchConfetti = () => {
@@ -176,54 +210,64 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     }, 250)
   }
 
+  if (!isMounted) {
+    return (
+      <div className="flex flex-col items-center w-full">
+        <div className="relative w-full max-w-[300px] md:max-w-[400px] aspect-square bg-gray-100 rounded-full animate-pulse" />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       {winner && (
-        <div className="mt-4 p-4 bg-green-100 rounded-lg text-center">
-          <p className="text-lg font-semibold text-green-800">
-            {t('prizeWheel.winningMessage')} {t(`prizes.${winner.type}.${winner.id}.name`)}
+        <div className={`mt-4 p-4 rounded-lg text-center w-full max-w-md ${
+          winner.name === 'Better Luck Next Time' 
+            ? 'bg-gray-100 text-gray-800' 
+            : 'bg-green-100 text-green-800'
+        }`}>
+          <p className="text-lg font-semibold">
+            {winner.name === 'Better Luck Next Time' 
+              ? 'Better luck next time! Keep trying! 🍀'
+              : `Congratulations! You won: ${winner.name} 🎉`}
           </p>
+          {winner.name !== 'Better Luck Next Time' && winner.description && (
+            <p className="mt-2 text-sm text-green-700">
+              {winner.description}
+            </p>
+          )}
         </div>
       )}
-      <div className="flex items-center gap-12">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12 w-full">
         {/* Logo */}
-        <div className="hidden md:block w-48 h-48 bg-green-50 rounded-full flex items-center justify-center shadow-lg p-4">
+        <div className="hidden md:flex w-32 h-32 md:w-48 md:h-48 bg-green-50 rounded-full items-center justify-center shadow-lg p-4">
           <img 
             src="/images/jivaphala-logo.png" 
             alt="Jivaphala Logo" 
             className="w-full h-full object-contain rounded-full border-4 border-green-600"
             onError={(e) => {
-              // Fallback if image doesn't exist
               const target = e.target as HTMLImageElement
               target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIiBmaWxsPSIjMTY2NTM0Ii8+PHBhdGggZD0iTTEyIDZ2MTJNNiAxMmgxMiIgc3Ryb2tlPSIjRkNEMzREIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg=='
             }}
           />
         </div>
 
-        {/* Wheel */}
-        <div className="relative w-[400px] h-[400px]">
+        {/* Wheel Container */}
+        <div className="relative w-full max-w-[300px] md:max-w-[400px] aspect-square">
           <canvas
-            ref={canvasRef}
-            width={400}
-            height={400}
-            className="transform"
-            style={{
-              transform: `rotate(${rotation}deg)`,
-              transition: isSpinning ? 'none' : 'transform 0.3s ease-out'
-            }}
+            id="prize-wheel"
+            ref={wheelRef}
+            width="400"
+            height="400"
+            className="w-full h-full transform rounded-full shadow-xl"
           />
-          
-          {/* Pointer */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2">
-            <div className="w-0 h-0 border-l-[20px] border-r-[20px] border-t-[40px] border-l-transparent border-r-transparent border-t-red-600"></div>
-          </div>
         </div>
       </div>
 
       <button
         onClick={spin}
         disabled={isSpinning}
-        className={`mt-8 px-8 py-4 text-xl font-bold rounded-full shadow-lg transform transition-all relative overflow-hidden ${
+        className={`mt-8 px-6 py-3 md:px-8 md:py-4 text-lg md:text-xl font-bold rounded-full shadow-lg transform transition-all relative overflow-hidden ${
           isSpinning
             ? 'bg-gray-400 cursor-not-allowed'
             : 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 hover:from-purple-500 hover:via-pink-600 hover:to-red-600 hover:scale-105 active:scale-95'
@@ -231,12 +275,15 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
       >
         <span className="flex items-center gap-2">
           {isSpinning ? (
-            t('common.loading')
+            <>
+              <span className="animate-spin">🎡</span>
+              <span>Spinning...</span>
+            </>
           ) : (
             <>
-              <span className="text-2xl">🦄</span>
-              <span>{t('prizeWheel.spinButton')}</span>
-              <span className="text-2xl">🌈</span>
+              <span className="text-2xl">🎯</span>
+              <span>Spin to Win!</span>
+              <span className="text-2xl">✨</span>
             </>
           )}
         </span>

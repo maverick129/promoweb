@@ -19,7 +19,7 @@ async function addTestCodes() {
   try {
     // Add each code to the database
     for (const code of testCodes) {
-      await prisma.code.create({
+      await prisma.promoCode.create({
         data: {
           code,
           used: false,

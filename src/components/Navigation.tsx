@@ -73,14 +73,15 @@ export default function Navigation() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+                className="inline-flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-green-600 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+                aria-label="Language selector"
               >
-                <FaGlobe className="mr-2" />
-                {languages.find(lang => lang.code === language)?.flag}
-                <span className="ml-2">{languages.find(lang => lang.code === language)?.name}</span>
+                <FaGlobe className="h-5 w-5" />
+                <span className="ml-1 text-sm sm:hidden">{languages.find(lang => lang.code === language)?.flag}</span>
+                <span className="sr-only">{t('navigation.language')}</span>
               </button>
               {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform transition-all duration-200 ease-in-out">
+                <div className="fixed sm:absolute inset-x-0 bottom-0 sm:bottom-auto sm:right-0 sm:mt-2 sm:w-48 rounded-t-lg sm:rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transform transition-all duration-200 ease-in-out">
                   <div className="py-1">
                     {languages.map((lang) => (
                       <button
@@ -89,7 +90,7 @@ export default function Navigation() {
                           setLanguage(lang.code as 'en' | 'id')
                           setIsOpen(false)
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm flex items-center ${
+                        className={`w-full text-left px-4 py-3 text-sm flex items-center ${
                           language === lang.code
                             ? 'bg-green-50 text-green-700'
                             : 'text-gray-700 hover:bg-gray-100'

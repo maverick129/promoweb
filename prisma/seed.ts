@@ -3,41 +3,124 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const prizes = [
+  // Instant Win Prizes
   {
-    name: 'T-Shirt',
-    description: 'Limited edition Jiva Prodi T-Shirt',
+    name: 'SOJIKYO 5 KG',
+    description: 'Premium SOJIKYO 5 KG package',
     type: 'instant',
-    probability: 0.3,
+    value: null,
+    quantity: 100,
+    probability: 0.1,
+    remaining: 100
+  },
+  {
+    name: 'Jiva Sprayer 2L',
+    description: 'High-quality 2L sprayer',
+    type: 'instant',
+    value: null,
+    quantity: 200,
+    probability: 0.15,
+    remaining: 200
+  },
+  {
+    name: 'Jiva T-shirt',
+    description: 'Limited edition Jiva T-shirt',
+    type: 'instant',
+    value: null,
+    quantity: 500,
+    probability: 0.2,
+    remaining: 500
+  },
+  {
+    name: 'Jiva Hat',
+    description: 'Stylish Jiva Hat',
+    type: 'instant',
+    value: null,
+    quantity: 500,
+    probability: 0.2,
+    remaining: 500
+  },
+  {
+    name: 'Jiva Toko Voucher Rp 20.000',
+    description: 'Rp 20.000 Jiva Toko Voucher',
+    type: 'instant',
+    value: '20000',
     quantity: 1000,
-    remaining: 1000,
-    claimed: 0
+    probability: 0.1,
+    remaining: 1000
   },
   {
-    name: 'Cap',
-    description: 'Stylish Jiva Prodi Cap',
+    name: 'Jiva Toko Voucher Rp 50.000',
+    description: 'Rp 50.000 Jiva Toko Voucher',
     type: 'instant',
-    probability: 0.3,
-    quantity: 1500,
-    remaining: 1500,
-    claimed: 0
+    value: '50000',
+    quantity: 500,
+    probability: 0.1,
+    remaining: 500
   },
   {
-    name: 'Water Bottle',
-    description: 'Durable Jiva Prodi Water Bottle',
+    name: 'Jiva Toko Voucher Rp 100.000',
+    description: 'Rp 100.000 Jiva Toko Voucher',
     type: 'instant',
-    probability: 0.3,
-    quantity: 2000,
-    remaining: 2000,
-    claimed: 0
+    value: '100000',
+    quantity: 200,
+    probability: 0.05,
+    remaining: 200
   },
   {
     name: 'Better Luck Next Time',
     description: 'Try again next time!',
     type: 'instant',
-    probability: 0.1,
+    value: null,
     quantity: 999999,
-    remaining: 999999,
-    claimed: 0
+    probability: 0.1,
+    remaining: 999999
+  },
+  // Grand Raffle Prizes
+  {
+    name: 'Bag of Cash Rp 20.000.000',
+    description: 'Grand Prize - Rp 20.000.000 Cash',
+    type: 'raffle',
+    value: '20000000',
+    quantity: 1,
+    probability: 0.01,
+    remaining: 1
+  },
+  {
+    name: 'Samsung Galaxy S22',
+    description: 'Latest Samsung Galaxy S22',
+    type: 'raffle',
+    value: null,
+    quantity: 1,
+    probability: 0.01,
+    remaining: 1
+  },
+  {
+    name: 'SOJIKYO 300-KG',
+    description: 'Premium SOJIKYO 300 KG package',
+    type: 'raffle',
+    value: null,
+    quantity: 1,
+    probability: 0.01,
+    remaining: 1
+  },
+  {
+    name: '40" TV',
+    description: '40-inch Smart TV',
+    type: 'raffle',
+    value: null,
+    quantity: 1,
+    probability: 0.01,
+    remaining: 1
+  },
+  {
+    name: 'Jiva Toko Voucher Rp 2.000.000',
+    description: 'Rp 2.000.000 Jiva Toko Voucher',
+    type: 'raffle',
+    value: '2000000',
+    quantity: 1,
+    probability: 0.01,
+    remaining: 1
   }
 ]
 
@@ -64,11 +147,14 @@ async function main() {
   console.log('Starting seed...')
 
   // Clear existing data
-  await prisma.win.deleteMany()
-  await prisma.prize.deleteMany()
-  await prisma.code.deleteMany()
-  await prisma.user.deleteMany()
-  await prisma.location.deleteMany()
+  await prisma.$transaction([
+    prisma.win.deleteMany(),
+    prisma.prize.deleteMany(),
+    prisma.user.deleteMany(),
+    prisma.location.deleteMany(),
+    prisma.promoCode.deleteMany(),
+    prisma.oTP.deleteMany()
+  ])
 
   // Seed prizes
   console.log('Seeding prizes...')
@@ -92,50 +178,38 @@ async function main() {
     })
   }
 
-  // Generate some sample codes
-  console.log('Generating sample codes...')
-  const sampleCodes = [
-    'JIVA2024',
-    'PRODI2024',
-    'WELCOME24',
-    'HEALTHY24',
-    'NATURAL24',
-  ]
+  // Generate 100 unique promo codes
+  console.log('Generating promo codes...')
+  const promoCodes = Array.from({ length: 100 }, (_, i) => {
+    const code = generateRandomCode()
+    return {
+      code,
+      used: false
+    }
+  })
 
-  for (const code of sampleCodes) {
-    await prisma.code.create({
-      data: {
-        code: code,
-        used: false,
-      },
-    })
-  }
-
-  // Seed promo codes
-  console.log('Seeding promo codes...')
-  const promoCodes = [
-    'ABC12345',
-    'DEF67890',
-    'GHI13579',
-    'JKL24680',
-    'MNO14725'
-  ]
-
-  for (const code of promoCodes) {
+  // Insert promo codes into database
+  for (const promoCode of promoCodes) {
     await prisma.promoCode.create({
-      data: {
-        code,
-        used: false
-      }
+      data: promoCode
     })
   }
 
   console.log('Seeding completed.')
 }
 
+function generateRandomCode(): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let code = ''
+  for (let i = 0; i < 8; i++) {
+    code += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return code
+}
+
 main()
   .catch((e) => {
-    console.error('Error during seeding:', e)
+    console.error(e)
     process.exit(1)
   })
   .finally(async () => {

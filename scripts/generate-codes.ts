@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-function generateCode(): string {
+function generatePromoCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let code = '';
   for (let i = 0; i < 8; i++) {
@@ -11,34 +11,41 @@ function generateCode(): string {
   return code;
 }
 
-async function main() {
+function generateUniqueCodes(count: number): string[] {
   const codes = new Set<string>();
-  
-  // Generate 100 unique codes
-  while (codes.size < 100) {
-    codes.add(generateCode());
+  while (codes.size < count) {
+    codes.add(generatePromoCode());
   }
-
-  // Insert codes into database
-  for (const code of codes) {
-    await prisma.raffleTicket.create({
-      data: {
-        code,
-        status: 'PENDING',
-        phone: '', // Empty phone number as these are new codes
-      },
-    });
-    console.log(`Added code: ${code}`);
-  }
-
-  console.log('Successfully added 100 codes to the database');
+  return Array.from(codes);
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
+async function main() {
+  try {
+    // Clear existing codes
+    await prisma.promoCode.deleteMany();
+    console.log('Cleared existing codes');
+
+    // Generate 100 unique codes
+    const promoCodes = generateUniqueCodes(100);
+    console.log('Generated 100 unique codes');
+
+    // Insert codes into database
+    for (const code of promoCodes) {
+      await prisma.promoCode.create({
+        data: {
+          code: code.toUpperCase(),
+          used: false
+        },
+      });
+      console.log(`Added code: ${code}`);
+    }
+
+    console.log('Successfully added 100 codes to the database');
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
     await prisma.$disconnect();
-  }); 
+  }
+}
+
+main(); 

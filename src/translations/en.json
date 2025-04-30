@@ -128,13 +128,14 @@
       "namePlaceholder": "Enter your full name",
       "phone": "Phone Number",
       "phonePlaceholder": "Enter your phone number",
+      "isdCode": "Country Code",
       "location": "Location",
       "locationPlaceholder": "Enter your location",
       "getLocation": "Get My Location",
       "submit": "Submit",
       "error": {
         "format": "Please enter a valid 8-digit code",
-        "phoneFormat": "Please enter a valid phone number",
+        "phoneFormat": "Please enter a valid phone number for the selected country code",
         "locationFailed": "Failed to get location",
         "locationDenied": "Location access denied",
         "locationNotSupported": "Location services not supported",
@@ -158,8 +159,66 @@
   "prizes": {
     "title": "Prizes",
     "subtitle": "Win amazing prizes with Jiva Prodi",
-    "instantWin": "Instant Win",
-    "rafflePrize": "Raffle Prize",
+    "instantWin": "Instant Win Prizes",
+    "rafflePrize": "Grand Raffle Prizes",
+    "grandPrize": "GRAND PRIZE",
+    "instantPrizes": {
+      "sojikyo5kg": {
+        "title": "SOJIKYO 5 KG",
+        "description": "Premium quality rice for your daily needs"
+      },
+      "sprayer": {
+        "title": "Jiva Sprayer 2L",
+        "description": "Professional-grade sprayer for your farming needs"
+      },
+      "tshirt": {
+        "title": "Jiva T-shirt",
+        "description": "Comfortable and stylish Jiva branded t-shirt"
+      },
+      "hat": {
+        "title": "Jiva Hat",
+        "description": "Protect yourself in style with our branded hat"
+      },
+      "voucher20k": {
+        "title": "Jiva Toko Voucher",
+        "description": "Rp 20.000 store credit"
+      },
+      "voucher50k": {
+        "title": "Jiva Toko Voucher",
+        "description": "Rp 50.000 store credit"
+      },
+      "voucher100k": {
+        "title": "Jiva Toko Voucher",
+        "description": "Rp 100.000 store credit"
+      }
+    },
+    "rafflePrizes": {
+      "cash": {
+        "title": "Bag of Cash",
+        "description": "Rp 20.000.000 cash prize",
+        "drawingDate": "Grand Prize Drawing: January 31, 2025"
+      },
+      "phone": {
+        "title": "Samsung Galaxy S22",
+        "description": "Latest Samsung flagship smartphone",
+        "drawingDate": "Drawing Date: January 31, 2025"
+      },
+      "sojikyo300kg": {
+        "title": "SOJIKYO 300-KG",
+        "description": "Premium quality rice supply",
+        "drawingDate": "Drawing Date: January 31, 2025"
+      },
+      "tv": {
+        "title": "40\" TV",
+        "description": "High-definition smart television",
+        "drawingDate": "Drawing Date: January 31, 2025"
+      },
+      "voucher2m": {
+        "title": "Jiva Toko Voucher",
+        "description": "Rp 2.000.000 store credit",
+        "drawingDate": "Drawing Date: January 31, 2025"
+      }
+    },
     "dailyPrize": "Daily Prize",
     "communityEvent": "Community Event",
     "seasonalReward": "Seasonal Reward",

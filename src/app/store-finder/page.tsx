@@ -284,15 +284,12 @@ export default function StoreFinder() {
       <Header />
       <main className="container mx-auto px-4 py-4 sm:py-8">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-20 relative overflow-hidden">
-          <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 text-white">
-              {t('storeFinder.title')}
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl mb-4 sm:mb-6 md:mb-8 text-white">
-              {t('storeFinder.subtitle')}
-            </p>
-          </div>
+        <div className="w-full">
+          <img
+            src="/images/store-finder-header.png"
+            alt="Store Finder Header"
+            className="w-full h-auto"
+          />
         </div>
 
         {/* Search and Map Section */}
