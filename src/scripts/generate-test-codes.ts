@@ -1,7 +1,7 @@
 const validChars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ' // No 0,1,I,O
 const codeLength = 8
 
-function generateCode(): string {
+function generateCode_2(): string {
   let code = ''
   for (let i = 0; i < codeLength; i++) {
     const randomIndex = Math.floor(Math.random() * validChars.length)
@@ -13,11 +13,11 @@ function generateCode(): string {
 // Generate 10 unique codes
 const codes = new Set<string>()
 while (codes.size < 10) {
-  codes.add(generateCode())
+  codes.add(generateCode_2())
 }
 
 console.log('Valid Test Codes:')
 console.log('----------------')
 codes.forEach((code, index) => {
   console.log(`${index + 1}. ${code}`)
-}) 
+})

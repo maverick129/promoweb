@@ -12,7 +12,10 @@ interface FAQItem {
 
 export default function FAQ() {
   const { t } = useLanguage()
-  const [questions] = useState<FAQItem[]>(t('faq.questions', { returnObjects: true }) as FAQItem[])
+  const [questions] = useState<FAQItem[]>(() => {
+    const translatedQuestions = t('faq.questions') as unknown as FAQItem[];
+    return Array.isArray(translatedQuestions) ? translatedQuestions : [];
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 flex flex-col">

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import confetti from 'canvas-confetti'
 import { useLanguage } from '@/contexts/LanguageContext'
+import Image from 'next/image'
 import Winwheel from 'winwheel'
 
 interface Prize {
@@ -71,7 +72,6 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     const canvas = wheelRef.current
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-
     // Set canvas dimensions
     canvas.width = 400
     canvas.height = 400
@@ -131,7 +131,11 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     ctx.closePath()
     ctx.stroke()
     ctx.fill()
-  }
+  }, [prizes])
+
+  useEffect(() => {
+    drawWheel()
+  }, [drawWheel])
 
   const alertPrize = (indicatedSegment: any) => {
     const winningPrize = indicatedSegment.prize
@@ -169,6 +173,7 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
     // Start the spin
     winwheelRef.current.animation.stopAngle = targetAngle
     winwheelRef.current.startAnimation()
+
   }
 
   const launchConfetti = () => {
@@ -241,7 +246,7 @@ export default function PrizeWheel({ prizes, onSpinComplete }: PrizeWheelProps) 
       <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12 w-full">
         {/* Logo */}
         <div className="hidden md:flex w-32 h-32 md:w-48 md:h-48 bg-green-50 rounded-full items-center justify-center shadow-lg p-4">
-          <img 
+          <img
             src="/images/jivaphala-logo.png" 
             alt="Jivaphala Logo" 
             className="w-full h-full object-contain rounded-full border-4 border-green-600"

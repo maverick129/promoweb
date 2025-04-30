@@ -26,7 +26,7 @@ export async function generateOTP(phone: string): Promise<string> {
     const validatedPhone = phoneSchema.parse(phone)
 
     // Check rate limiting
-    const recentOtps = await prisma.otp.count({
+    const recentOtps = await prisma.oTP.count({
       where: {
         phone: validatedPhone,
         createdAt: {
@@ -43,7 +43,7 @@ export async function generateOTP(phone: string): Promise<string> {
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     
     // Store OTP in database with expiration
-    await prisma.otp.create({
+    await prisma.oTP.create({
       data: {
         phone: validatedPhone,
         code: otp,
@@ -72,7 +72,7 @@ export async function verifyOTP(phone: string, code: string): Promise<boolean> {
     const validatedCode = otpSchema.parse(code)
 
     // Find the most recent valid OTP
-    const otp = await prisma.otp.findFirst({
+    const otp = await prisma.oTP.findFirst({
       where: {
         phone: validatedPhone,
         code: validatedCode,
@@ -90,7 +90,7 @@ export async function verifyOTP(phone: string, code: string): Promise<boolean> {
 
     if (!otp) {
       // Increment attempts for all recent OTPs
-      await prisma.otp.updateMany({
+      await prisma.oTP.updateMany({
         where: {
           phone: validatedPhone,
           createdAt: {
@@ -107,12 +107,12 @@ export async function verifyOTP(phone: string, code: string): Promise<boolean> {
     }
 
     // Delete used OTP
-    await prisma.otp.delete({
+    await prisma.oTP.delete({
       where: { id: otp.id }
     })
 
     // Clean up expired OTPs
-    await prisma.otp.deleteMany({
+    await prisma.oTP.deleteMany({
       where: {
         expiresAt: {
           lt: new Date()
