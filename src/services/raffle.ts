@@ -8,12 +8,11 @@ export async function generateRaffleTicket(phone: string): Promise<string> {
     // Generate a unique ticket code
     const ticketCode = nanoid(10).toUpperCase()
     
-    // Create the raffle ticket in the database
-    await prisma.raffleTicket.create({
+    // Create the promo code in the database
+    await prisma.promoCode.create({
       data: {
         code: ticketCode,
-        phone,
-        status: 'PENDING',
+        used: false
       },
     })
 

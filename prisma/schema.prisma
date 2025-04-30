@@ -1,10 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  location  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  winners   Winner[]
+  locationData Location?
+  promoCodes PromoCode[]
+}
+
+model PromoCode {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  used      Boolean  @default(false)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  winner    Winner?
 }
 
 model Prize {
@@ -12,13 +38,26 @@ model Prize {
   name        String
   description String
   type        String   // "instant" or "raffle"
-  probability Float
-  quantity    Int
-  remaining   Int
-  claimed     Int      @default(0)
+  value       String?
+  quantity    Int      @default(1)
+  probability Float    @default(0)
+  remaining   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  winners     Winner[]
   wins        Win[]
+}
+
+model Winner {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  prizeId   String
+  prize     Prize    @relation(fields: [prizeId], references: [id])
+  codeId    String   @unique
+  code      PromoCode @relation(fields: [codeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Win {
@@ -31,25 +70,6 @@ model Win {
   updatedAt DateTime @updatedAt
 }
 
-model Code {
-  id        String    @id @default(cuid())
-  code      String    @unique
-  used      Boolean   @default(false)
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  phone     String   @unique
-  location  Location @relation(fields: [locationId], references: [id])
-  locationId String  @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Location {
   id        String   @id @default(uuid())
   lat       Float
@@ -57,7 +77,8 @@ model Location {
   address   String
   city      String
   province  String
-  user      User?
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -73,23 +94,4 @@ model OTP {
 
   @@index([phone])
   @@index([expiresAt])
-}
-
-model PromoCode {
-  id        String   @id @default(uuid())
-  code      String   @unique
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model RaffleTicket {
-  id        String   @id @default(uuid())
-  code      String   @unique
-  phone     String
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([phone])
 } 

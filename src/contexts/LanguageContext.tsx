@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react'
 import enTranslations from '@/translations/en.json'
 import idTranslations from '@/translations/id.json'
 
@@ -20,7 +20,21 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en')
+  const [language, setLanguageState] = useState<Language>('id')
+
+  // Load language from localStorage on initial render
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language') as Language
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'id')) {
+      setLanguageState(savedLanguage)
+    }
+  }, [])
+
+  // Update localStorage when language changes
+  const setLanguage = (lang: Language) => {
+    localStorage.setItem('language', lang)
+    setLanguageState(lang)
+  }
 
   const t = (key: string): string => {
     const keys = key.split('.')

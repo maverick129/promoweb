@@ -22,9 +22,13 @@ interface Prize {
 }
 
 const prizeColors = {
-  'T-Shirt': { color: '#166534', textColor: '#FCD34D', symbol: '👕' },
-  'Cap': { color: '#065F46', textColor: '#FCD34D', symbol: '🧢' },
-  'Water Bottle': { color: '#047857', textColor: '#FCD34D', symbol: '🥤' },
+  'SOJIKYO 5 KG': { color: '#166534', textColor: '#FCD34D', symbol: '🌾' },
+  'Jiva Sprayer 2L': { color: '#065F46', textColor: '#FCD34D', symbol: '💦' },
+  'Jiva T-shirt': { color: '#047857', textColor: '#FCD34D', symbol: '👕' },
+  'Jiva Hat': { color: '#0F766E', textColor: '#FCD34D', symbol: '🧢' },
+  'Jiva Toko Voucher Rp 20.000': { color: '#115E59', textColor: '#FCD34D', symbol: '💰' },
+  'Jiva Toko Voucher Rp 50.000': { color: '#134E4A', textColor: '#FCD34D', symbol: '💰' },
+  'Jiva Toko Voucher Rp 100.000': { color: '#0D9488', textColor: '#FCD34D', symbol: '💰' },
   'Better Luck Next Time': { color: '#991B1B', textColor: '#FCD34D', symbol: '❌' }
 }
 
